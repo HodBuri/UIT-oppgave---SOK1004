@@ -133,6 +133,9 @@ Lag en pen figur som viser BNP i tusener av kroner per person, i både løpende 
 ```{r}
 # Oppgave Ib løses her 
 
+# Litten endring, fjernet et library jeg testet ut
+library(scales)
+
 tibbel_df %>%
   filter(var %in% c("BNP","MEMOBNP"),tid >= 2000) %>%
   ggplot(aes(x=tid,y=verdi,color = var)) +
