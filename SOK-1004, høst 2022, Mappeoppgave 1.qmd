@@ -51,7 +51,7 @@ hod_theme <- function(alter_x_axis_colour = FALSE,
   colour_palette_standard <- c("#ffa822", "#ff6150","#1ac0c6")
   colour_text_x_axis <- colour_text
   
-  if(alter_x_axis_colur){
+  if(alter_x_axis_colour){
      colour_text_x_axis <- c(colour_text,colour_text_light)
   }
     
@@ -263,8 +263,6 @@ oecd_n %>%
   scale_colour_manual(labels = c("Total population","AGE 18-65", "Above 65"), values = c("#ffa822", "#ff6150","#1ac0c6"),breaks=c('TOT', 'WA', 'OLD'))+
   facet_wrap(~ factor (MEASURE, (levels=c("GINI", "GINIB", "GINIG"))))+
   hod_theme(alter_x_axis_colour = TRUE, ledgend_pos = "bottom")
-
-#scale_colour_manual(labels = c("above 65", "Total population","18-65"), values = c("#ffa822", "#ff6150","#1ac0c6"))+
 ```
 
 Gi en nøyaktig beskrivelse av figuren med de tre Gini-målene. Bruk figuren til å svare på følgende spørsmål:
@@ -294,6 +292,7 @@ skatt_troms_2015 <- url %>%
   url() %>%
   gzcon() %>% 
   readRDS()
+
 ```
 
 Vi skal kun bruke Tromsø kommune, så vi lager en ny dataframe med observasjoner fra Tromsø (kommune 1902):
