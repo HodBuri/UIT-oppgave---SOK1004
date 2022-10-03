@@ -140,6 +140,8 @@ US:
 
 US har en kraftig GDP similert til Kina, men US sakte minimerte CO2 utslipp relatert til GDP økning. Nå US har hadd over ca 14 trilioner i GDP så har CO2 utslipp gådd nedover.
 
+Så pattern i denne figuren er at CO2 og GDP vil øke ilag inn til et hvis threshold, etter det så vil CO2 balanseres ut før d begynner og redusere mens GDP forsetter å øke
+
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~
 
 I denne graphen så er det lett å se hvordan GDP og CO2 direkte relaterer til hverandere, og hvordan forskielige land reagerer til høyere GDP. Men å se hvorfor landene regerer på denne måten er vanskelig, vi vet at US, Germany har mer similære politiske og economiske view point, mens India og China differs more. Kan det være en relasjon på hvorfor US, Germany og Japans CO2 utslipp gikk ned etter et hvis punkt, mens China og Indias har had konstant vekst.
@@ -184,7 +186,17 @@ India ser vi en stabil økning før den flatner ut
 
 Japan har en rolig økning til rundt samme tid som Germany og US der den flatness ut før den begyner og minskes rundt 1970
 
-Grunden får økning i carbon itensitet tirlig kan være at utviklingen av et lands industri normalt set starter ut med bruk av kull, og dereter så kan de minke bruk av kull mens GDP i landet økes.
+Vi ser også at Japan spesielt, men også Kina at relasjonen mellom CO2 og GDP ikke går ned like raskt som US og Tyskland. Som man kan se i figuren så stopper veksten av carbon intensity samtidig mellom US, Tysklan og Japan. I 2020 så er dem på omtrent på samme plass som gir mening, utenom at Japan var mye lavere en US og Tyskland i carbon intensity. Det visser at relasonen mellom CO2 og GDP er vanskelig å separere. Forskjellige grunder til det kan være
+
+-   Lande slitter med å øke GDP
+
+-   Bruk av energi som utslipper CO2 er kostbart i de landene
+
+-   CO2 og GDP går ned ilag
+
+Grunden får økning i carbon itensitet tirlig kan være at utviklingen av et lands industri normalt set starter ut med biligere og utdatert heller ny og teknologi som ikke er optimalisert. Etter industrier er blitt bygget kan man optimalisere og finne nye løsninger får å redusere CO2 utslipp mens mans øker GDP i landet.
+
+En anden årsak kan også være similert til den andre er at med økning av GDP så kan folk fokusere mer på politik, utdanning og industri utviklig. Som da vil ha et similert end resultat.
 
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~
 
@@ -234,15 +246,11 @@ df%>%
 
 *\[Besvar oppgave Ic her\]*
 
-USA øker kull bruk når de splitter fra tysklan i coal intensety rundt 1950-1960
+I disse two figurene ser vi at landene som tokk i bruk kull tidlig, har redusert bruket i de siste 20 årende. Spesifkt så begynner reduksjonen i Tysklands rundt 1980 og US engang mellom 2000-2010. Mens Kina og Indias bruk av kull har øket kraftig i nyere tid, 1950 får Kina og 1980 får India.
 
-India og china e dem som har økt kraftig med bruk av kull
+I Kina ser vi at litt etter en kraftig økning av kull bruk så går carbon intensity ned, som kan indikere at kull er en billig energi kilde i Kina, heller at kull slipper ut mindre CO2. Og det motsatte kan bli sett oss Tyskland og US der demmes der demmes carbon intensity redusers i 1920-1940 når dem beveger seg vekk ifra kull.
 
-japan har også øket bruk av kull
-
-tyskland er den eneste som har konstant gådd ned siden 1960
-
-Bruk av kull i alle demmes industrier øker demmes GDP rasket
+I 1960 ser man at US tar i bruk en dell kull igjen, samtidig som demmes carbon intensity splittes ifra tyskland. Dette kan igjen indikere at brenning av kull produserer mer CO2.
 
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~
 
@@ -255,6 +263,12 @@ I den foregående analysen har vi slått fast at Kina har høy karbonintensitet 
 Forklar hvordan konsumbaserte CO2-utslipp er konstruert og hvordan vi skal tolke den.
 
 *\[Besvar oppgave IIa her.\]*
+
+Konsumbaserte CO2 er regnet med å ta landets total CO2 utslipp + CO2 utslipp av importerte produkter - CO2 utslipp av exporterte produkter.
+
+Eksempel der er hvis Norge exporterer olje så tar vi minus kostnaden får menged olje vi exporterer, men vi legger til CO2 kostnadene får bilene vi importerer.
+
+Så dette skal bli lest som mengde CO2 et land konsume, ikke mengden CO2 et land produserer.
 
 ### Oppgave IIb
 
@@ -279,11 +293,15 @@ df %>%
   + hod_theme() + guides(size=guide_legend(override.aes=list(colour="#b8aba7")))
 ```
 
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~
+
 *\[Besvar oppgave IIb her.\]*
 
-Figuren viser at alle land unten om Kina og India har had sin høyeste bruk av CO2 per capital enten i starten av 1990 heller mot mid 2000-2010 og fra der har CO2 bruk minsket
+Figuren viser at alle land unten om Kina og India har had sin høyeste bruk av CO2 per capital enten i starten av 1990 heller mot mid 2000-2010 og fra der har CO2 bruk minsket. Men de landene som har redusert bruk av CO2 per capita, har holt seg like consumption CO2, som kan indikere importering av produkter med høy CO2 kostnad.
 
-Som nevt Kina og India er de abnormale der vi ser økning i nyere tid.
+Kina og India er de eneste landene som har en økning i både consumption CO2 og per capita consumtion.
+
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~
 
 ## III. Produksjon- og konsumbaserte utslipp
 
@@ -308,8 +326,12 @@ Positive (negative) value indicates net imports (export) of CO2 emissions.", col
   + theme_bw()
 ```
 
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~
+
 *\[Besvar oppgave III her\]*
 
-Vi kan se at japan og tyskland har traided bort demmes CO2 share siden 1990, imens US kjøpte CO2 shares opptil slutten av 1990 hvor etter dem begynte og selle demmes shares
+Figuren viser hvor mye prosentvis av all konsumbaserte CO2 utslipp var gjennom import heller export.
 
-India og Kina har aktivli kgjøpt mer shares med kinas størrste kjøp i ca 2007, hvor US og Tyskland hadde god salg av CO2 shares.
+Vi ser at Kina og India har høy export av CO2, i mes US, Tyskland og Japan har høy Import av CO2. Vi ser også at når US og Tyskland i mode 2000-2010 økte deres import av CO2, øktes Kinas export.
+
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~
