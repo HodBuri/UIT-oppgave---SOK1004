@@ -34,70 +34,6 @@ editor: visual
 
 Dokumentet skal besvare spørsmålene nedenfor.
 
-```{r}
-# A custome theme I use
-
-# note to self create a new colour palette function
-
-hod_theme <- function(alter_x_axis_colour = FALSE,
-                      ledgend_pos = "right") {
-  
-  colour_text <- "#b8aba7"
-  colour_text_light <- "#FFE9E3"
-  colour_box <- "#2b2b2b"
-  colour_lines <- "#827974"
-  colour_main <- "#E9D5DA"
-  colour_background <- "#2b2b2b"
-  colour_palette_standard <- c("#ffa822", "#ff6150","#1ac0c6")
-  colour_text_x_axis <- colour_text
-  
-  if(alter_x_axis_colour){
-     colour_text_x_axis <- c(colour_text,colour_text_light)
-  }
-    
-  theme(
-    # Border and margin
-    plot.margin = margin(0.4, 0.6, 0.4, 0.4, "cm"),
-    panel.border = element_rect(colour = colour_box, fill = NA, linetype = 2),
-    
-    # background
-    panel.background = element_rect(fill = colour_background),
-    plot.background = element_rect(fill = colour_background),
-    strip.background = element_rect(fill = colour_background),
-    
-    rect = element_rect(fill = colour_background, colour = "white",
-                        size = 0.5, linetype = 1),
-    
-    # grid
-    panel.grid.major.x = element_line(colour = colour_lines, linetype = 5, size = 0.25),
-    panel.grid.minor.x = element_blank(),
-    panel.grid.major.y =  element_line(colour = colour_lines, linetype = 5, size = 0.25),
-    panel.grid.minor.y = element_blank(),
-    axis.ticks = element_line(colour = colour_text),
-    
-    # line
-    line = element_line(colour = colour_palette_standard),
-    
-    # text
-    text = element_text(colour = colour_text, face = "italic", family = "mono"),
-    plot.title = element_text(colour = colour_text_light, face = "bold", family = "mono"),
-    plot.subtitle = element_text(colour = colour_text, family = "mono", hjust = 0.01),
-    plot.caption = element_text(colour = colour_text, face = "italic", family = "mono"),
-    axis.text.y = element_text(colour = colour_text, face = "italic", family = "mono"),
-    axis.text.x = element_text(colour = colour_text_x_axis, face = "italic", family = "mono"),
-    axis.title = element_text(colour = colour_text_light, family = "mono"),
-    plot.tag = element_text(colour = colour_text, face = "italic", family = "mono"),
-    legend.text = element_text(color = colour_text,face = "italic", family = "mono"),
-    legend.title = element_text(colour = colour_text, face = "italic", family = "mono"),
-    strip.text = element_text(colour = colour_text_light, face = "bold", family = "mono"),
-    
-    # legend
-    legend.position = ledgend_pos,
-    legend.key = element_rect(fill = colour_background)
-  )
-}
-```
-
 # **Oppgave 1. Årsaker og konsekvenser av ulikhet**
 
 En ressurs til oppgave 1 her kan være kapittel 6 ["Økende ulikhet"](https://github.com/uit-sok-1004-h22/uit-sok-1004-h22.github.io/blob/main/artikler/nho_perspektivmeldingen_6_okende-ulikhet.pdf) i "Verden og oss, Næringslivets perspektivmelding 2018", NHO.
@@ -144,7 +80,7 @@ Andre ting man
 
 På den mer ekstreme siden, så kan det føre til en persjon på toppen med all kontrol mens alle andre kommer til å streve med å leve.
 
-### MER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+### MER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
@@ -228,6 +164,71 @@ oecd_n <- url %>%
   read_csv()
 ```
 
+```{r}
+# A custome theme I use
+
+# note to self create a new colour palette function
+col_palette = c("#b8aba7",)
+
+hod_theme <- function(alter_x_axis_colour = FALSE,
+                      ledgend_pos = "right") {
+  
+  colour_text <- "#b8aba7"
+  colour_text_light <- "#FFE9E3"
+  colour_box <- "#2b2b2b"
+  colour_lines <- "#827974"
+  colour_main <- "#E9D5DA"
+  colour_background <- "#2b2b2b"
+  colour_palette_standard <- c("#ffa822", "#ff6150","#1ac0c6")
+  colour_text_x_axis <- colour_text
+  
+  if(alter_x_axis_colour){
+     colour_text_x_axis <- c(colour_text,colour_text_light)
+  }
+    
+  theme(
+    # Border and margin
+    plot.margin = margin(0.4, 0.6, 0.4, 0.4, "cm"),
+    panel.border = element_rect(colour = colour_box, fill = NA, linetype = 2),
+    
+    # background
+    panel.background = element_rect(fill = colour_background),
+    plot.background = element_rect(fill = colour_background),
+    strip.background = element_rect(fill = colour_background),
+    
+    rect = element_rect(fill = colour_background, colour = "white",
+                        size = 0.5, linetype = 1),
+    
+    # grid
+    panel.grid.major.x = element_line(colour = colour_lines, linetype = 5, size = 0.25),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y =  element_line(colour = colour_lines, linetype = 5, size = 0.25),
+    panel.grid.minor.y = element_blank(),
+    axis.ticks = element_line(colour = colour_text),
+    
+    # line
+    line = element_line(colour = colour_palette_standard),
+    
+    # text
+    text = element_text(colour = colour_text, face = "italic", family = "mono"),
+    plot.title = element_text(colour = colour_text_light, face = "bold", family = "mono"),
+    plot.subtitle = element_text(colour = colour_text, family = "mono", hjust = 0.01),
+    plot.caption = element_text(colour = colour_text, face = "italic", family = "mono"),
+    axis.text.y = element_text(colour = colour_text, face = "italic", family = "mono"),
+    axis.text.x = element_text(colour = colour_text_x_axis, face = "italic", family = "mono"),
+    axis.title = element_text(colour = colour_text_light, family = "mono"),
+    plot.tag = element_text(colour = colour_text, face = "italic", family = "mono"),
+    legend.text = element_text(color = colour_text,face = "italic", family = "mono"),
+    legend.title = element_text(colour = colour_text, face = "italic", family = "mono"),
+    strip.text = element_text(colour = colour_text_light, face = "bold", family = "mono"),
+    
+    # legend
+    legend.position = ledgend_pos,
+    legend.key = element_rect(fill = colour_background)
+  )
+}
+```
+
 ## **Oppgave 3a**
 
 Bruk datasettet til å lage en figur med tre paneler ved siden av hverandre. Jeg anbefaler å bruke funksjonen [facets](https://r4ds.had.co.nz/data-visualisation.html#facets), se eksempelet under. I hver figur skal du tegne et spredningsplott (*scatterplot*) ved hjelp av `ggplot` og `geom_point()`, med årstall på den horisontale `x`-aksen, og verdien på Gini på den vertikale `y`-aksen. Tegn inn alle tre definisjoner av Gini som du har i datasettet.
@@ -254,12 +255,20 @@ oecd_n %>% # data
 ```
 
 ```{r}
+graph_title <- "GINI gjennom år delt på alders gruppe"
+
+graph_subtitle <- "GINI  - disposable income, post taxes and transfers\nGINIB - market income, before taxes and transfers\nGINIG - gross income, before taxes"
+
+y_label <- "GINI"
+
+x_label <- "Year - (2008-2019)"
+
 oecd_n %>%
   filter(MEASURE %in% c("GINI", "GINIB", "GINIG")) %>% 
   ggplot(aes(x = Year, y=Value, color=AGE))+
   geom_point()+
   scale_x_continuous(labels = function(x) paste0(ifelse(x<2010,"0",""),x-2000),n.breaks = 11)+
-  labs (title = "GINI gjennom år delt på alders gruppe", y = "GINI", x= "Year - (2008-2019)", subtitle = "GINI  - disposable income, post taxes and transfers\nGINIB - market income, before taxes and transfers\nGINIG - gross income, before taxes",color="AGE GROUP")+
+  labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="AGE GROUP")+
   scale_colour_manual(labels = c("Total population","AGE 18-65", "Above 65"), values = c("#ffa822", "#ff6150","#1ac0c6"),breaks=c('TOT', 'WA', 'OLD'))+
   facet_wrap(~ factor (MEASURE, (levels=c("GINI", "GINIB", "GINIG"))))+
   hod_theme(alter_x_axis_colour = TRUE, ledgend_pos = "bottom")
@@ -278,6 +287,27 @@ Gi en nøyaktig beskrivelse av figuren med de tre Gini-målene. Bruk figuren til
 ## **Oppgave 3b**
 
 Lag en ny figur hvor du bruker de andre ulikhetsmålene (P90P10 og S80S20) til å undersøke ulikhet mellom arbeidere og pensjonister i tidsperioden 2008-2019. Her kan du for eksempel tegne et spredningsplott for hver gruppe. Bruk figuren som grunnlag for å beskrive inntektsulikhet. Er svarene dine det samme som i 3a? Hvorfor/hvorfor ikke?
+
+```{r}
+graph_title <- "P90P10 vs S80S20"
+
+graph_subtitle <- "Forholdstallet - N difference"
+
+y_label <- "Forholdstallet"
+
+x_label <- "Year - (2008-2019)"
+
+oecd_n %>%
+  filter(MEASURE %in% c("P90P10", "S80S20"),AGE %in% c("WA", "OLD")) %>% 
+  ggplot(aes(x = Year, y=Value,color=AGE))+
+  geom_point() +
+  scale_shape_manual(values=c(6,10))+
+  scale_x_continuous(labels = function(x) paste0(ifelse(x<2010,"0",""),x-2000),n.breaks = 11)+
+  labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="AGE GROUP")+
+  scale_colour_manual(labels = c("AGE 18-65", "Above 65"), values = c("#ff6150","#1ac0c6"),breaks=c('WA', 'OLD'))+
+  facet_wrap(~ factor (MEASURE, (levels=c("P90P10", "S80S20"))))+
+  hod_theme(alter_x_axis_colour = TRUE, ledgend_pos = "bottom")
+```
 
 # **Oppgave 4. Casestudie: Tromsø kommune 2015**
 
@@ -305,9 +335,69 @@ tromso <-  filter(skatt_troms_2015, kommnr == "1902")
 
 Lag en ny variabel ved hjelp av `mutate()` som viser inntekt fratrukket skatt. Noen av disse verdiene er negative, og disse kan du sette lik 0, for eksempel ved `data[data < 0] <- 0` dersom dataframe heter "data").
 
+```{r}
+tromso <- tromso %>%
+  mutate(inntekt_net = ifelse(inntekt-skatt<0,0,inntekt-skatt))
+
+tromso <- tromso %>%
+  relocate("skatt", .after = "inntekt_net")
+```
+
 ## **Oppgave 4a**
 
 Tegn et spredningsplott med fødselsår på x-aksen og inntekt (før og etter skatt) på y-aksen. Hvordan kan vi tolke dette bildet i forhold til inntektsulikhet i Tromsø kommune, og hvilken rolle spiller skattesystemet her?
+
+```{r}
+tromso_long <- tromso %>%
+  pivot_longer(cols = c(inntekt,inntekt_net),names_to = "inntekt_type", values_to = "inntekt_value") 
+```
+
+```{r}
+library(scales)
+
+graph_title <- "inntekt i alder"
+
+graph_subtitle <- "inntekt målt i million"
+
+y_label <- "inntekt"
+
+x_label <- "fødsel år"
+
+# normal
+tromso_long %>%
+  ggplot(aes(x = fodt, y=inntekt_value*10^-6,color=inntekt_type))+
+  geom_point(alpha=0.7) +
+  scale_x_continuous(n.breaks = 11)+
+  labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="")+
+  scale_colour_manual(labels = c("inntekt bruto", "inntekt nett"), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
+  hod_theme(ledgend_pos = "bottom")
+
+# log10
+
+tromso_long %>%
+  ggplot(aes(x = fodt, y=inntekt_value,color=inntekt_type))+
+  geom_point(alpha=0.7) +
+  scale_y_continuous(trans = "log10",
+                     breaks=trans_breaks("log10", function(x) 10^x),
+                     labels=trans_format("log10", math_format(10^.x)))+
+  scale_x_continuous(n.breaks = 11)+
+  labs (title = graph_title, y = paste(y_label,"log10"), x= x_label, subtitle = graph_subtitle,color="")+
+  scale_colour_manual(labels = c("inntekt bruto", "inntekt nett"), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
+  hod_theme(ledgend_pos = "bottom")
+
+# split
+
+tromso_long %>%
+  ggplot(aes(x = fodt, y=inntekt_value*10^-6,color=inntekt_type))+
+  geom_point() +
+  scale_x_continuous(n.breaks = 8)+
+  labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="")+
+  scale_colour_manual(labels = c("", ""), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
+  facet_wrap(~ factor (inntekt_type, (levels=c("inntekt", "inntekt_net"))),labeller = as_labeller(
+                         c("inntekt" = "BRUTO", 
+                           "inntekt_net" = "NETTO")))+
+  hod_theme(ledgend_pos = "none",alter_x_axis_colour = TRUE)
+```
 
 ## **Oppgave 4b**
 
@@ -340,6 +430,30 @@ df %>%
 
 Hvilket bilde får du av inntektsulikhet i Tromsø kommune? Lag en tilsvarende figur for inntekt etter skatt og kommentér og forklar eventuelle forskjeller.
 
+```{r}
+df <- tromso %>%
+  select(inntekt_net) %>% 
+  quantile(probs = seq(0,1, .01), na.rm=TRUE)
+
+
+df <- as_tibble(df)
+
+df <- df %>% 
+  add_column(Persentil=c(0:100))
+
+df <- df %>% 
+  rename(inntekt_etter_skatt=value)
+
+
+df %>% 
+  ggplot(aes(x=Persentil,y=inntekt_etter_skatt/1000)) +
+  geom_col(fill = "#ffa822")+
+  scale_x_continuous(labels = function(x) paste0(x,"%"))+
+  labs (title = "Inntektsfordeling i Tromsø 2015 (etter skatt)",
+        y = "Inntekt (1000kr)", x= "Persentil")+
+  hod_theme()
+```
+
 ## **Oppgave 4c**
 
 Vi skal nå tegne en Lorenz-kurve og beregne en Gini-koeffisient for Tromsø kommune. Først må du `install.packages("gglorenz")` , og laste pakken inn: `library(gglorenz)` . Hvordan pakken fungere kan du finne her: [gglorenz](https://cran.r-project.org/web/packages/gglorenz/gglorenz.pdf). Her er et eksempel hvor jeg har brukt Harstad kommune som grunnlag (kommunenr 1903):
@@ -369,6 +483,28 @@ ggplot(harstad, aes(inntekt))+
 ```
 
 Tegn to Lorenz-kurver for Tromsø kommune (før og etter skatt), samt tilhørende Gini-koeffisienter. Sammenlikn med de relevante Gini-koeffisientene for hele Norge fra 2015 fra OECD datasettet. Er inntektsfordelingen i Tromsø mer eller mindre lik sammenliknet med landet som helhet? Gi mulige forklaringer.
+
+```{r}
+# before tax
+tromso %>%
+  ggplot(aes(inntekt))+
+  stat_lorenz(color = "#ffa822")+
+  annotate_ineq(tromso$inntekt,color = "#FFE9E3")+
+  scale_x_continuous(labels = function(x) paste0(x*100,"%"))+
+  scale_y_continuous(labels = function(y) paste0(y*100,"%"))+
+  labs (x="andel av befolkningen", y= "andel av inntekt", title = "Lorenz-kurve, Tromso kommune 2015, før skatt")+
+  hod_theme()
+
+# after tax
+tromso %>%
+  ggplot(aes(inntekt_net))+
+  stat_lorenz(color = "#ffa822")+
+  annotate_ineq(tromso$inntekt_net,color = "#FFE9E3")+
+  scale_x_continuous(labels = function(x) paste0(x*100,"%"))+
+  scale_y_continuous(labels = function(y) paste0(y*100,"%"))+
+  labs (x="andel av befolkningen", y= "andel av inntekt", title = "Lorenz-kurve, Tromso kommune 2015, etter skatt")+
+  hod_theme()
+```
 
 # **3. Bedømmelse**
 
