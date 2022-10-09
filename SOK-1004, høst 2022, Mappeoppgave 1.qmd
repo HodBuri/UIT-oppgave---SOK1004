@@ -80,7 +80,7 @@ Andre ting man
 
 På den mer ekstreme siden, så kan det føre til en persjon på toppen med all kontrol mens alle andre kommer til å streve med å leve.
 
-### MER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+### MER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! add +
 
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
@@ -168,7 +168,7 @@ oecd_n <- url %>%
 # A custome theme I use
 
 # note to self create a new colour palette function
-col_palette = c("#b8aba7",)
+col_palette = c("#b8aba7")
 
 hod_theme <- function(alter_x_axis_colour = FALSE,
                       ledgend_pos = "right") {
@@ -366,7 +366,7 @@ x_label <- "fødsel år"
 # normal
 tromso_long %>%
   ggplot(aes(x = fodt, y=inntekt_value*10^-6,color=inntekt_type))+
-  geom_point(alpha=0.7) +
+  geom_point(alpha=0.5) +
   scale_x_continuous(n.breaks = 11)+
   labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="")+
   scale_colour_manual(labels = c("inntekt bruto", "inntekt nett"), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
@@ -376,13 +376,14 @@ tromso_long %>%
 
 tromso_long %>%
   ggplot(aes(x = fodt, y=inntekt_value,color=inntekt_type))+
-  geom_point(alpha=0.7) +
-  scale_y_continuous(trans = "log10",
+  geom_point(alpha=0.5) +
+  scale_y_continuous(trans  = compose_trans("log10"),
                      breaks=trans_breaks("log10", function(x) 10^x),
-                     labels=trans_format("log10", math_format(10^.x)))+
+                     labels=trans_format("log10", math_format(10^x)))+
   scale_x_continuous(n.breaks = 11)+
   labs (title = graph_title, y = paste(y_label,"log10"), x= x_label, subtitle = graph_subtitle,color="")+
   scale_colour_manual(labels = c("inntekt bruto", "inntekt nett"), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
+scale_fill_brewer(palette = "YlGnBu")+
   hod_theme(ledgend_pos = "bottom")
 
 # split
@@ -489,6 +490,7 @@ Tegn to Lorenz-kurver for Tromsø kommune (før og etter skatt), samt tilhørend
 tromso %>%
   ggplot(aes(inntekt))+
   stat_lorenz(color = "#ffa822")+
+  geom_abline(x=c(0,1),y=c(0,1),color="#FFE9E3",alpha=0.3,linetype = "dashed")+
   annotate_ineq(tromso$inntekt,color = "#FFE9E3")+
   scale_x_continuous(labels = function(x) paste0(x*100,"%"))+
   scale_y_continuous(labels = function(y) paste0(y*100,"%"))+
