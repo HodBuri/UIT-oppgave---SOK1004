@@ -44,7 +44,7 @@ Hva menes med inntektsulikhet i et land?
 
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
-Inntektsulikhet er differance i intekt mellom folket i landet, og det kan bli målet på flere måter
+Inntektsulikhet er differance i inntekt mellom folket i landet, målt i gjennom en tids periode ofte ett år. Og det er en av de to faktorene som blir målt når man måler økonomisk ulikheter, den andre er formue ulikhet.
 
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
@@ -66,6 +66,32 @@ Mulighetene folk har i landet og hvor lett det er å få tilgang til
 
 -   sikerhet
 
+kan være noen av grundene inntekt er ufordelt. Ting som kan skape disse problemene er:
+
+-   Nye Jobber, extrem innovasjon og gammle jobber forsvinner
+
+    -   Nye jobber i nye fields som ikker er ornterlig forstådd heller regulert kan skape monopolys
+
+    -   gammle jobber og skills kan bli utdatert, og det vil gjøre det umulig får dem å få jobber
+
+-   Korrupsjon og nepotism
+
+-   Tyranny og oppressiv goverment
+
+-   Politiske og økonomiske systemer der det er billig å være rik og dyrt og være fatig, og ofte får fatige folk til å være stuck i en loop der de prøver å fikse problemer som skaper mer problemer i fremtiden eksemple:
+
+    -   Dyr helse tjeneste
+
+        -   Folk som har rå til å dra til doktorer kan takle problemene før dem blir problematiske
+
+        -   Dårlig helse gjør det vaskligere for folk å holde jobber
+
+    -   Elte folk som har prøvd å få psychological hjelp heller har brute loven i en verre sitvasjon en det de var i
+
+-   Ubalansert skatting
+
+    -   Tho man har lyst til å balansere det, hvis det blir for dyrt å tjene penger så vil det øke tiden før prosjekter og innovasjon kan bli gjenomført. Får høy skatt kan også demotivere entreprenører
+
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
 ## **Oppgave 1c**
@@ -76,11 +102,9 @@ Hvilke konsekvenser kan ulikhet i inntektsfordelingen føre til?
 
 På den mindre ekstreme siden så kan man se forskjell i utdanning og tilgang til networking, som kan føre til at folkene med resurser kan lett starte favoritism, nepotism og det kan også føre til korupsjon ved manupulering og monpolising et market som eksempel.
 
-Andre ting man
-
 På den mer ekstreme siden, så kan det føre til en persjon på toppen med all kontrol mens alle andre kommer til å streve med å leve.
 
-### MER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! add +
+Posetive ting som kan komme fra ulikhet i inntekstsfordelingen, hvis grunnen får ulikheten er korrekt kan være økning av innovasjon og høyere GDP gjennom tiltrekning av entreprenører
 
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
@@ -98,6 +122,22 @@ Gini-koeffisientene er areale mellom en perfect equality distribution og Lorenz 
 
 så får å beregne det, så tar man og regner ut arialet under Lorenz kurven og tar det minus total arealet av triangle ( triangle fordi arealet mellom en perfect equality distribution og en perfect unequal distribution vil forme et triangle )
 
+A = areal mellom perfect equality distribution og Lorenz kurven
+
+B = areal under Lorenz kurven
+
+$$
+GINI=\frac{A}{A+B}
+$$
+
+Så GINI er basically percent av ett right triangle, der hypotenuse linjen er kurven får "perfect equality distribution".
+
+P90P10 og S80S20 similert til gini måler innkome ulikhet
+
+P90P10 er måling av hvordan ulikhet er fordelt mellom top 10% og bottom 10% averagen, og her tar man en singuler persjon fra begge sidene som ligger imellom 1-2 og 9-10 slik at man ikke får extrem endene
+
+S80S20 er måling av forholdet mellom top 20% og bottom 20% gjennomsnits inntekt, og dette innkluderer de mest extreme av begge sidene.
+
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
 ## **Oppgave 2b**
@@ -108,35 +148,13 @@ En ressurs her kan være ["Slik måler SSB ulikhet"](https://www.ssb.no/inntekt-
 
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
-#### Gini coefficient
+gini gir et bra overview over midel delen, som kan gi en bedre forstålse på hvordan ulikhet innpakter flertallet av befolkningen som ikke befiner seg på extrem endene.
 
--   overview
+P90P10 gir et bedre oversikt over hvordan ulikheten er mellom top og bottom i innkom er.
 
--   Bryr sæ itje om landet er rikt heller fatig
+S80S20 er bedre for extrem endene, men similert til P90P10 så er det verre på å hvise hvordan en average persjon har det.
 
--   
-
-relevant:
-
-#### P90/P10
-
--   Måler de som er over 90% mot dem som har mindre en 90%
-
--   Tar ikke med de mest extreme dra begge sidene
-
--   
-
-relevant:
-
-#### S80/S20
-
--   Tar 20 top percent mot bottom
-
--   Include the extreme on both side
-
--   
-
-relevant:
+ingen av de her viser hvordan landets økonomi er i sin helhet, men heller hvordan innkom er fordelt. Som der igjen kan pointe mot negative heller posetive effekter i landet.
 
 \-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
 
@@ -166,9 +184,6 @@ oecd_n <- url %>%
 
 ```{r}
 # A custome theme I use
-
-# note to self create a new colour palette function
-col_palette = c("#b8aba7")
 
 hod_theme <- function(alter_x_axis_colour = FALSE,
                       ledgend_pos = "right") {
@@ -265,12 +280,15 @@ x_label <- "Year - (2008-2019)"
 
 oecd_n %>%
   filter(MEASURE %in% c("GINI", "GINIB", "GINIG")) %>% 
-  ggplot(aes(x = Year, y=Value, color=AGE))+
+  ggplot(aes(x = Year, y=Value, color=MEASURE))+
   geom_point()+
   scale_x_continuous(labels = function(x) paste0(ifelse(x<2010,"0",""),x-2000),n.breaks = 11)+
-  labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="AGE GROUP")+
-  scale_colour_manual(labels = c("Total population","AGE 18-65", "Above 65"), values = c("#ffa822", "#ff6150","#1ac0c6"),breaks=c('TOT', 'WA', 'OLD'))+
-  facet_wrap(~ factor (MEASURE, (levels=c("GINI", "GINIB", "GINIG"))))+
+  labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="")+
+  scale_colour_manual(values = c("#ffa822", "#ff6150","#1ac0c6"),breaks=c("GINI", "GINIB", "GINIG"))+
+  facet_wrap(~ factor (AGE, (levels=c('TOT', 'WA', 'OLD'))), labeller = as_labeller(
+                         c("TOT" = "Alle", 
+                           "WA" = "Arbeidere", 
+                           "OLD" = "Pensjonert")))+
   hod_theme(alter_x_axis_colour = TRUE, ledgend_pos = "bottom")
 ```
 
@@ -284,12 +302,22 @@ Gi en nøyaktig beskrivelse av figuren med de tre Gini-målene. Bruk figuren til
 
 -   Hvilken rolle spiller samfunnets institusjoner, for eksempel skatte- og pensjonssystemet, for utjevning av ulikhet mellom arbeidere og pensjonister?
 
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
+
+Figuren viser at ginien har holdt seg relativt stabil med en litten økning i 2015, graphen viser også at GINIB har høyest ulikhet og med pensjonister som høyest ulikhet faktor, dette viser at skatting, og hvordan skattepengen er brukt gjennom pensjon og andre welfare programs balanserer ulikheten.
+
+Forskjellen mellom de forsjkjellige GINI valuene er som det står i subtittelen at, GINI er etter skatt er trukket og fordeling gjennom velferds programmer er added. Forantil de to andre GINI valuene som er før skatt og/heller transfer.
+
+Figuren viser også at transfer er det som balanserer ulikhet mest, så å bare skatting vil ikke gjøre så mye uten å planelege hvordan skattepengene skal brukes får å redusere innkoms ulikhet.
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\--
+
 ## **Oppgave 3b**
 
 Lag en ny figur hvor du bruker de andre ulikhetsmålene (P90P10 og S80S20) til å undersøke ulikhet mellom arbeidere og pensjonister i tidsperioden 2008-2019. Her kan du for eksempel tegne et spredningsplott for hver gruppe. Bruk figuren som grunnlag for å beskrive inntektsulikhet. Er svarene dine det samme som i 3a? Hvorfor/hvorfor ikke?
 
 ```{r}
-graph_title <- "P90P10 vs S80S20"
+graph_title <- "P90P10 vs S80S20 delt på alders gruppe"
 
 graph_subtitle <- "Forholdstallet - N difference"
 
@@ -299,15 +327,20 @@ x_label <- "Year - (2008-2019)"
 
 oecd_n %>%
   filter(MEASURE %in% c("P90P10", "S80S20"),AGE %in% c("WA", "OLD")) %>% 
-  ggplot(aes(x = Year, y=Value,color=AGE))+
+  ggplot(aes(x = Year, y=Value,color=MEASURE))+
   geom_point() +
   scale_shape_manual(values=c(6,10))+
   scale_x_continuous(labels = function(x) paste0(ifelse(x<2010,"0",""),x-2000),n.breaks = 11)+
   labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="AGE GROUP")+
-  scale_colour_manual(labels = c("AGE 18-65", "Above 65"), values = c("#ff6150","#1ac0c6"),breaks=c('WA', 'OLD'))+
-  facet_wrap(~ factor (MEASURE, (levels=c("P90P10", "S80S20"))))+
+  scale_colour_manual(values = c("#ff6150","#1ac0c6"),breaks=c('P90P10', 'S80S20'))+
+  facet_wrap(~ factor (AGE, (levels=c("WA", "OLD"))), labeller = as_labeller(
+                         c( 
+                           "WA" = "Arbeidere", 
+                           "OLD" = "Pensjonert")))+
   hod_theme(alter_x_axis_colour = TRUE, ledgend_pos = "bottom")
 ```
+
+Similert til gini ser vi at pensjoner hadde minst ulikhet (etter skatt og transfer). Men her ser vi en gradvis økning i ulihet i arbeidere gruppen, spesielt i S80S20.
 
 # **Oppgave 4. Casestudie: Tromsø kommune 2015**
 
@@ -340,7 +373,7 @@ tromso <- tromso %>%
   mutate(inntekt_net = ifelse(inntekt-skatt<0,0,inntekt-skatt))
 
 tromso <- tromso %>%
-  relocate("skatt", .after = "inntekt_net")
+  relocate("skatt", .after = "formue")
 ```
 
 ## **Oppgave 4a**
@@ -349,7 +382,10 @@ Tegn et spredningsplott med fødselsår på x-aksen og inntekt (før og etter sk
 
 ```{r}
 tromso_long <- tromso %>%
-  pivot_longer(cols = c(inntekt,inntekt_net),names_to = "inntekt_type", values_to = "inntekt_value") 
+  pivot_longer(cols = c(inntekt,inntekt_net),names_to = "inntekt_type", values_to = "inntekt_value")
+
+tromso_long <- tromso_long %>%
+  relocate("inntekt_type", .after = "inntekt_value")
 ```
 
 ```{r}
@@ -372,33 +408,59 @@ tromso_long %>%
   scale_colour_manual(labels = c("inntekt bruto", "inntekt nett"), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
   hod_theme(ledgend_pos = "bottom")
 
-# log10
-
-tromso_long %>%
-  ggplot(aes(x = fodt, y=inntekt_value,color=inntekt_type))+
-  geom_point(alpha=0.5) +
-  scale_y_continuous(trans  = compose_trans("log10"),
-                     breaks=trans_breaks("log10", function(x) 10^x),
-                     labels=trans_format("log10", math_format(10^x)))+
-  scale_x_continuous(n.breaks = 11)+
-  labs (title = graph_title, y = paste(y_label,"log10"), x= x_label, subtitle = graph_subtitle,color="")+
-  scale_colour_manual(labels = c("inntekt bruto", "inntekt nett"), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
-scale_fill_brewer(palette = "YlGnBu")+
-  hod_theme(ledgend_pos = "bottom")
-
-# split
+# split med limit
 
 tromso_long %>%
   ggplot(aes(x = fodt, y=inntekt_value*10^-6,color=inntekt_type))+
   geom_point() +
   scale_x_continuous(n.breaks = 8)+
+  coord_cartesian(ylim=c(0,7))+
   labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="")+
   scale_colour_manual(labels = c("", ""), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
   facet_wrap(~ factor (inntekt_type, (levels=c("inntekt", "inntekt_net"))),labeller = as_labeller(
                          c("inntekt" = "BRUTO", 
                            "inntekt_net" = "NETTO")))+
   hod_theme(ledgend_pos = "none",alter_x_axis_colour = TRUE)
+
+# med limit
+tromso_long %>%
+  ggplot(aes(x = fodt, y=inntekt_value*10^-6,color=inntekt_type))+
+  geom_point(alpha=0.5) +
+  scale_x_continuous(n.breaks = 11)+
+  coord_cartesian(ylim=c(0,7))+
+  labs (title = graph_title, y = y_label, x= x_label, subtitle = graph_subtitle,color="")+
+  scale_colour_manual(labels = c("inntekt bruto", "inntekt nett"), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
+  hod_theme(ledgend_pos = "bottom")
+
+# log10
+
+tromso_long %>%
+  ggplot(aes(x = fodt, y=inntekt_value,color=inntekt_type))+
+  geom_point(alpha=0.5) +
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x),
+              labels = trans_format("log10", math_format(10^.x))) +
+  scale_x_continuous(n.breaks = 11)+
+  labs (title = graph_title, y = paste(y_label,"log10"), x= x_label, subtitle = graph_subtitle,color="")+
+  scale_colour_manual(labels = c("inntekt bruto", "inntekt nett"), values = c("#ff6150","#1ac0c6"),breaks=c('inntekt', 'inntekt_net'))+
+scale_fill_brewer(palette = "YlGnBu")+
+  hod_theme(ledgend_pos = "bottom")
+
+
 ```
+
+Vi kan bruke figuren her til å se hvordan inntekt forsjelen mellom aldersgrupper er og hvordan skatt påvirker innkom.
+
+Figurene her viser at folk rundt 50-70 år har høyest inntekt, men skjennerelt at eldere og ungere folk har lavere inntekt. Så inntekts ulikhet vil være relatert til det, men hvorfor folk i den alders gruppen har så mye mer kan ikke furen si. Hypotesr får ulikhet kan være alt fra:
+
+-   flere folk i den alder gruppen
+
+-   høyere inntekts jobber i den gruppen (CEO som eksempel)
+
+-   korrupsjon, monopoly heller nepotism i demmes tid
+
+Men graphen kan ikke si hvorfor, bare at det er en forskjell der.
+
+Relatert til skatt så kan vi se i figuren at skatt reduserer innkomen till alle og balanserer ting litt mer.
 
 ## **Oppgave 4b**
 
@@ -446,14 +508,40 @@ df <- df %>%
   rename(inntekt_etter_skatt=value)
 
 
+
+graph_title <- "Inntektsfordeling i Tromsø 2015 (etter skatt)"
+
+graph_subtitle <- "inntekt målt i tusen (250 = 250 000)"
+
+y_label <- "Inntekt (1000 NOK)"
+
+x_label <- "Persentil"
+
+
+# full graph
 df %>% 
   ggplot(aes(x=Persentil,y=inntekt_etter_skatt/1000)) +
   geom_col(fill = "#ffa822")+
   scale_x_continuous(labels = function(x) paste0(x,"%"))+
-  labs (title = "Inntektsfordeling i Tromsø 2015 (etter skatt)",
-        y = "Inntekt (1000kr)", x= "Persentil")+
+  labs (title = graph_title, subtitle = graph_subtitle,
+        y = y_label, x= x_label)+
+  hod_theme()
+
+
+# Zoomed graph
+df %>% 
+  ggplot(aes(x=Persentil,y=inntekt_etter_skatt/1000)) +
+  geom_col(fill = "#ffa822")+
+  scale_x_continuous(labels = function(x) paste0(x,"%"))+
+  coord_cartesian(ylim=c(0,1000))+
+  annotate(geom="text", x=87, y=950, label="inntekt 20,000+ ->",
+              color="#FFE9E3")+
+  labs (title = graph_title, subtitle = graph_subtitle,
+        y = y_label, x= x_label)+
   hod_theme()
 ```
+
+den sterke hoved forskjellen man kan se mellom før og etter skatt figuren er en kraftig reduksjon i top persentil der den gikk ifra 30 000 til 20 000. Man kan også se en lavere økning i mot top ersentil, som ilag med forige observasjon viser at med mer inntekt kommer høyere skatt.
 
 ## **Oppgave 4c**
 
@@ -486,27 +574,48 @@ ggplot(harstad, aes(inntekt))+
 Tegn to Lorenz-kurver for Tromsø kommune (før og etter skatt), samt tilhørende Gini-koeffisienter. Sammenlikn med de relevante Gini-koeffisientene for hele Norge fra 2015 fra OECD datasettet. Er inntektsfordelingen i Tromsø mer eller mindre lik sammenliknet med landet som helhet? Gi mulige forklaringer.
 
 ```{r}
+graph_title <- "Lorenz-kurve, Tromso kommune 2015,"
+
+y_label <- "andel av befolkningen"
+
+x_label <- "andel av inntekt"
+
+norge_gini_2015_net <- oecd_n %>% 
+  filter(MEASURE == "GINI", Year==2015, AGE=="TOT") %>% select(Value)
+
+norge_gini_2015_bruto <- oecd_n %>% 
+  filter(MEASURE == "GINIG", Year==2015, AGE=="TOT") %>% select(Value)
+
+
+
 # before tax
 tromso %>%
   ggplot(aes(inntekt))+
   stat_lorenz(color = "#ffa822")+
-  geom_abline(x=c(0,1),y=c(0,1),color="#FFE9E3",alpha=0.3,linetype = "dashed")+
+  geom_abline(color="#FFE9E3",alpha=0.3,linetype = "dashed")+
   annotate_ineq(tromso$inntekt,color = "#FFE9E3")+
+  annotate(geom="text", x=0.185, y=0.8, label= paste("Norge GINI 2015:",norge_gini_2015_bruto),color="#FFE9E3")+
   scale_x_continuous(labels = function(x) paste0(x*100,"%"))+
   scale_y_continuous(labels = function(y) paste0(y*100,"%"))+
-  labs (x="andel av befolkningen", y= "andel av inntekt", title = "Lorenz-kurve, Tromso kommune 2015, før skatt")+
+  labs (x=x_label, y= y_label, title = paste(graph_title,"før skatt"))+
   hod_theme()
+
+
 
 # after tax
 tromso %>%
   ggplot(aes(inntekt_net))+
   stat_lorenz(color = "#ffa822")+
+  geom_abline(color="#FFE9E3",alpha=0.3,linetype = "dashed")+
   annotate_ineq(tromso$inntekt_net,color = "#FFE9E3")+
+  annotate(geom="text", x=0.185, y=0.8, label= paste("Norge GINI 2015:",norge_gini_2015_net),color="#FFE9E3")+
   scale_x_continuous(labels = function(x) paste0(x*100,"%"))+
   scale_y_continuous(labels = function(y) paste0(y*100,"%"))+
-  labs (x="andel av befolkningen", y= "andel av inntekt", title = "Lorenz-kurve, Tromso kommune 2015, etter skatt")+
+  labs (x=x_label, y= y_label, title = paste(graph_title,"etter skatt"))+
   hod_theme()
 ```
+
+Det er en del forskjel mellom Tromsø og Norges GINI value, som figurene viser så har Tromsø en bra my høyere inntekts ulikhet. Det er vanskelig å si ka grunnden får forskell er bare fra denne figuren, men en av grunnene kan være at av det som blir skattet ifra tromsø, blir ikke like mye puttet tilbake i velferds programmene.
 
 # **3. Bedømmelse**
 
