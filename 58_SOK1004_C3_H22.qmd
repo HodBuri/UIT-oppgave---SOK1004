@@ -38,9 +38,6 @@ Tolk ligning $(4)$. Gi en konkret forklaring på hva tallet representerer.
 
 *\[Besvar Oppgave I her\]*
 
-
-
-
 # Oppgave II: Rydd i data
 
 Vi begynner med å rydde og laste inn pakker.
@@ -204,6 +201,13 @@ Nå er det deres tur til å rydde. Slett variablene `year` og `month`. Gi variab
 
 ```{r}
 # løs oppgave II her
+df_update <- df %>%
+  filter(year>=2011,statistikkvariabel == "Konsumprisindeks (vekter)")
+
+df_update <- subset(df_update, select = -c(month,year))
+
+df <- df_update
+
 ```
 
 # Oppgave III: Beregn et vektet gjennomsnitt
@@ -216,6 +220,9 @@ Del vektene i `df` på 1000, og sjekk at de summerer seg til om lag `1` for hver
 
 ```{r}
 # besvar oppgave IIIa her
+df_pivot <- pivot_wider(df, values_from = value,names_from = "konsumgruppe")
+vekt <- subset(df_pivot, select = -c(statistikkvariabel,dato))
+
 ```
 
 ## Oppgave IIIb: Beregn prisindeksen fra gruppene med vekter
