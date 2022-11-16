@@ -24,19 +24,19 @@ I denne oppgaven skal du undersøke hvordan en husholdning fordeler sitt forbruk
 
 Vi skal se på en husholdning som fordeler sitt budsjett hver uke mellom mat (M) og andre konsumgoder (K). Preferansene til husholdningen uttrykkes gjennom en nyttefunksjon $U(K,M)$. Nivåkurvene til nyttefunksjonen kalles indifferenskurver. Anta at husholdningens nyttefunksjon er av type Cobb-Douglas:
 
-### $U(K,M)=K^aM^b$             (1)
+### $U(K,M)=K^aM^b$ (1)
 
 En indifferenskurve som gir nyttenivå $U_0$ defineres som
 
-### $U_0=K^aM^b$                         (2)
+### $U_0=K^aM^b$ (2)
 
 La oss bruke `ggplot2` til å tegne noen indifferenskurver. Først må vi skrive om (2):
 
-### $K^a=\frac{U_0}{M^b}⇒(K^a)\frac{1}{a}=(\frac{U_0}{M^b})\frac{1}{a}⇒K=\frac{U_0\frac{1}{a}}{M^\frac{b}{a}}$                 (3)
+### $K^a=\frac{U_0}{M^b}⇒(K^a)\frac{1}{a}=(\frac{U_0}{M^b})\frac{1}{a}⇒K=\frac{U_0\frac{1}{a}}{M^\frac{b}{a}}$ (3)
 
 I det videre skal vi anta at $a=\frac{3}{5},b=\frac{2}{5}$, slik at (3) skrives
 
-### $K=\frac{U_0^\frac{5}{3}}{M\frac{2}{3}}$                              (4)
+### $K=\frac{U_0^\frac{5}{3}}{M\frac{2}{3}}$ (4)
 
 Følgende kode tegner tre indifferenskurver for nyttenivåene 4000, 4741 og 5500
 
@@ -152,13 +152,13 @@ figur_1 <- axes_1 +
 figur_1
 ```
 
-### Forklar: 
+### Forklar:
 
 #### (i) Hvorfor indifferenskurvene heller nedover;
 
 Fordi d mer du får av den ene, mindre får du av d andre og totallen skal altig være lik over helle indifferenskurven
 
-#### (ii) hvorfor nytten er størst når vi beveger oss i nordøstlig retning i figuren; 
+#### (ii) hvorfor nytten er størst når vi beveger oss i nordøstlig retning i figuren;
 
 Fordi lengere nordøstlig i graphen, får man mer av begge
 
@@ -192,9 +192,9 @@ $$
 0.8x+1y=8500
 $$
 
-$$
+\$\$
 
-$$
+\$\$
 
 #### (ii) Hva er helningen til budsjettlinjen, og hvordan tolkes denne?
 
@@ -748,51 +748,111 @@ M = 8500
 
 df_4 <- data.frame(x=seq(0, 10500, by = 1))
 
-bc_1 <- function(x) 8500-0.80*x
-bc_2 <- function(x) 8500-0.85*x
+bc_1 <- function(x) M-P_2[1]*x
+bc_2 <- function(x) M-P_2[2]*x
 
-print(bc_1(1))
 
 U_1 <- function(x) (4741^(5/3))/x^(2/3)
 U_2 <- function(x) (4615^(5/3))/x^(2/3)
 
-#lag aksen for tegningen
-axes_1 <- df_4 %>%
-  ggplot(aes(x))+
-  labs(title="Husholdningens tilpasning", x="Mat",y="Konsumgoder")+
-  hod_theme()+
-  coord_fixed(ratio = 1)+ # lik skala for x og y aksen
-  scale_x_continuous(limits = c(3000, 10500), expand = c(0, 0))+
-  scale_y_continuous(limits = c(1000, 9000), expand = c(0, 0)) # begrense aksene
-# og sikre at akselinjene møttes i (0,0).
+color_l2 = c("#1ac0c6","#ffa822","#FFE9E3","#ffffff")
 
-color_l2 = c("#1ac0c6","#ffa822","#1ac0c6","#ffa822")
+#GRAPH
+title_label <- "Husholdningens tilpasning"
+subtitle_label <- "--------------"
+y_label <- "Konsumgoder"
+x_label <- "Mat"
+
 df_4 %>%
   ggplot(aes(x))+
-  labs(title="Husholdningens tilpasning", x="Mat",y="Konsumgoder")+
-  hod_theme()+
-  coord_fixed(ratio = 1)+ # lik skala for x og y aksen
   scale_x_continuous(limits = c(3000, 10500), expand = c(0, 0))+
   scale_y_continuous(limits = c(1000, 9000), expand = c(0, 0)) + 
   stat_function(df_4,fun=U_1,mapping = aes(color = "price = 0.8")) +
   stat_function(df_4,fun=U_2,mapping = aes(color = "price = 0.85")) +
-  stat_function(df_4,fun=bc_1, mapping = aes(color = "bc price = 0.8"))+
-  stat_function(df_4,fun=bc_2, mapping = aes(color = "bc price = 0.85"))+
+  stat_function(df_4,fun=bc_1, mapping = aes(), linetype="dashed",colour = "#FFE9E3")+
+  stat_function(df_4,fun=bc_2, mapping = aes(), linetype="dashed",colour = "#FFE9E3")+
+  geom_segment(aes(x=4250, y=5100, xend=4250, yend=1000), linetype="dashed",color = "#ffffff") +
+  geom_segment(aes(x=4000, y=5100, xend=4000, yend=1000), linetype="dashed",color = "#ffffff") +
   annotate("text",x=10000,y=3200, label="U_1",color=color_l[1])+
   annotate("text",x=10000,y=2500, label="U_2",color=color_l[2])+
+  geom_point(aes(x=4250, y=5100),color = "#ffffff")+
+  geom_point(aes(x=4000, y=5100),color = "#ffffff")+
+  labs(y = y_label, x = x_label, title = title_label, subtitle = subtitle_label, color = "")+
   scale_colour_manual(values = color_l2,breaks=c("price = 0.8","price = 0.85","bc price = 0.8","bc price = 0.85"))+
   hod_theme()
 ```
 
-## **Oppgave 3b** 
+## **Oppgave 3b**
 
-#### i) Vis i figuren hvordan den totale nedgangen i husholdningens konsum av mat kan dekomponeres i en inntekts- og substitusjonseffekt.
+```{r}
+P_1 = 1
+P_2 = c(0.80,0.85)
+K_1 = 5100
+K_2 = 4000
+M = 8500
 
-#### (ii) Myndighetene vurderer å kompensere husholdningen for prisøkningen på matvarer. Vis i figuren hvor mye inntekt husholdningen bør få tilført for å få det like bra som før prisøkningen. (Hint: ettersom prisen på konsumgoder er 1 kan dette beløpet vises i figuren som en vertikal avstand, dvs x konsumgoder koster x kr).
+df_4 <- data.frame(x=seq(0, 10500, by = 1))
 
-#### (iii) I Case 3 har dere sett hvordan KPI beregnes, og dette er også diskutert i [Johannessen](https://www.ssb.no/priser-og-prisindekser/artikler-og-publikasjoner/_attachment/203142?_ts=1495b28c170) (2014) (avsnitt som heter \"Et teoretisk utgangspunkt\") og [Langer og Johannessen](https://www.ssb.no/a/publikasjoner/pdf/oa_201004/johannessen.pdf) (2010) side 41. Man legger til grunn en versjon av en Laspeyres indeks. Beskriv med ord hvordan en Laspeyres indeks settes sammen. Vis i din figur fra 3b(ii) hvor mye inntekt husholdningen ville få fra myndighetene om denne metoden legges til grunn. Hva antas om substitusjonseffekten her?
+bc_1 <- function(x) M-P_2[1]*x
+bc_2 <- function(x) M-P_2[2]*x
+bc_2d <- function(x) 8500-P_2[2]*(x-225)
 
-#### (iv) \"Siktemålet med konsumprisindeksen (KPI) er å lage en levekostnadsindeks som skal gi svar på hvilken inntektskompensasjon som er nødvendig for at en gjennomsnittlig husholdning skal kunne opprettholde sin levestandard når prisen på varer og tjenester endres\" ([Johannessen](https://www.ssb.no/priser-og-prisindekser/artikler-og-publikasjoner/_attachment/203142?_ts=1495b28c170), 2014; 13). Basert på dine svar til (ii) og (iii) hvor bra fungerer KPI som levekostnadsindeks?
+U_1 <- function(x) (4740^(5/3))/x^(2/3)
+U_2 <- function(x) (4615^(5/3))/x^(2/3)
+
+color_l2 = c("#1ac0c6","#ffa822","#FFE9E3","#ffffff")
+
+#GRAPH
+title_label <- "Husholdningens tilpasning"
+subtitle_label <- "--------------"
+y_label <- "Konsumgoder"
+x_label <- "Mat"
+
+
+draw_guides<- function(x, y) {
+  list(geom_segment(aes(x = -Inf, xend = x, y = y, yend = y), linetype = "dashed"),
+       geom_segment(aes(x = x, xend = x, y = y, yend = -Inf), linetype = "dashed"))
+}
+
+
+df_4 %>%
+  ggplot(aes(x))+
+  scale_x_continuous(limits = c(3500, 5000), expand = c(0, 0))+
+  scale_y_continuous(limits = c(4000, 6500), expand = c(0, 0)) + 
+  stat_function(df_4,fun=U_1,mapping = aes(color = "price = 0.8")) +
+  stat_function(df_4,fun=U_2,mapping = aes(color = "price = 0.85")) +
+  stat_function(df_4,fun=bc_1, mapping = aes(), linetype="dashed",colour = "#FFE9E3")+
+  stat_function(df_4,fun=bc_2, mapping = aes(), linetype="dashed",colour = "#FFE9E3")+
+    stat_function(df_4,fun=bc_2d, mapping = aes(), linetype="solid",colour = "#FFE9E3")+
+  geom_segment(aes(x=4250, y=5100, xend=4250, yend=4000), linetype="dashed",color = "#ffffff") +
+  geom_segment(aes(x=4000, y=5100, xend=4000, yend=4000), linetype="dashed",color = "#ffffff") +
+    geom_segment(aes(x=4100, y=5200, xend=4100, yend=4000), linetype="dashed",color = "#ffffff") +
+  annotate("text",x=10000,y=3200, label="U_1",color=color_l[1])+
+  annotate("text",x=10000,y=2500, label="U_2",color=color_l[2])+
+  geom_point(aes(x=4250, y=5100),color = "#ffffff")+
+  geom_point(aes(x=4000, y=5100),color = "#ffffff")+
+  geom_point(aes(x=4100, y=5200),color = "#ffffff")+
+  annotate("text",x=4250,y=5200, label="A",color=color_l2[3])+
+  annotate("text",x=4000,y=5200, label="C",color=color_l2[3])+
+  annotate("text",x=4100,y=5300, label="B",color=color_l2[3])+
+  labs(y = y_label, x = x_label, title = title_label, subtitle = subtitle_label, color = "")+
+  scale_colour_manual(values = color_l2,breaks=c("price = 0.8","price = 0.85","bc price = 0.8","bc price = 0.85"))+
+  hod_theme()
+```
+
+#### (iii) I Case 3 har dere sett hvordan KPI beregnes, og dette er også diskutert i [Johannessen](https://www.ssb.no/priser-og-prisindekser/artikler-og-publikasjoner/_attachment/203142?_ts=1495b28c170) (2014) (avsnitt som heter "Et teoretisk utgangspunkt") og [Langer og Johannessen](https://www.ssb.no/a/publikasjoner/pdf/oa_201004/johannessen.pdf) (2010) side 41. Man legger til grunn en versjon av en Laspeyres indeks. Beskriv med ord hvordan en Laspeyres indeks settes sammen. Vis i din figur fra 3b(ii) hvor mye inntekt husholdningen ville få fra myndighetene om denne metoden legges til grunn. Hva antas om substitusjonseffekten her?
+
+den er sammensat av cost av base year basket delt på base year cost av base year basket
+
+$$
+L =\frac{"Current\space{cost}\space{of}\space{base}\space{year}\space{basket}"}{"Base\space{year}\space{cost}\space{of}\space{base}\space{year}\space{basket}"}
+$$
+
+#### (iv) "Siktemålet med konsumprisindeksen (KPI) er å lage en levekostnadsindeks som skal gi svar på hvilken inntektskompensasjon som er nødvendig for at en gjennomsnittlig husholdning skal kunne opprettholde sin levestandard når prisen på varer og tjenester endres" ([Johannessen](https://www.ssb.no/priser-og-prisindekser/artikler-og-publikasjoner/_attachment/203142?_ts=1495b28c170), 2014; 13). Basert på dine svar til (ii) og (iii) hvor bra fungerer KPI som levekostnadsindeks
+
+D fungerer greit for d den gjør, d æ ofte hører er at den gir ikke et realistik bilde på ting siden den antar at folk altd kjøper like mye av nokka og at kvalitet ikke endrer seg.
+
+Et eksemple på det æ høre var "du kan få kjøpt en bra mye bedre mobil idag får 5000kr en du kunne får 10 år siden". Bedre der vil si mer avansert, flere funksjoner som øker verdien og høyere generel kvalitet.
 
 # **3. Bedømmelse**
 
