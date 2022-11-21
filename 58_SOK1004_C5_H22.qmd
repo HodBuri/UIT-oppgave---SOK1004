@@ -1,0 +1,436 @@
+# Instruksjoner
+
+Denne oppgaven skal løses interaktivt i RStudio ved å legge inn egen kode og kommentarer. Det ferdige dokumentet lagres med kandidatnummeret som navn `[kandidatnummer]_SOK1004_C5_H22.qmd` og lastes opp på deres GitHub-side. Hvis du har kandidatnummer 43, så vil filen hete `43_SOK1004_C5_H22.qmd`. Påse at koden kjører og at dere kan eksportere besvarelsen til pdf. Lever så lenken til GitHub-repositoriumet i Canvas.
+
+# Bakgrunn, læringsmål
+
+I [seminar 3, oppgave 3](https://uit-sok-1004-h22.github.io/seminar/s3.html) leste dere [kapittel 1 i NOU 2015:1](https://uit-sok-1004-h22.github.io/seminar/NOU%202015_%201%20kap%201%20(prod1).pdf) "Produktivitet - grunnlag for vekst og velferd." I denne oppgaven skal vi oppdatere tall brukt i analysen. Gjennom arbeidet vil dere repetere de grunnleggende ferdighetene i bruk av API, `tidyverse` og `ggplot` som vi har arbeidet med gjennom kurset. Dere vil også få anledning til å reflektere rundt sammenhengene i nasjonalregnskapet og å grave litt i statistikkbanken hos SSB.
+
+# Last inn pakker
+
+```{r}
+# output | false
+rm(list=ls()) 
+library(tidyverse)
+library(rjstat)
+library(httr)
+
+suppressPackageStartupMessages(library(tidyverse))
+# A custome theme I use
+hod_theme <- function(alter_x_axis_colour = FALSE,
+                      ledgend_pos = "right") {
+  
+  colour_text <- "#b8aba7"
+  colour_text_light <- "#FFE9E3"
+  colour_box <- "#2b2b2b"
+  colour_lines <- "#827974"
+  colour_main <- "#E9D5DA"
+  colour_background <- "#2b2b2b"
+  colour_palette_standard <- c("#ffa822", "#ff6150","#1ac0c6")
+  colour_text_x_axis <- colour_text
+  
+  if(alter_x_axis_colour){
+     colour_text_x_axis <- c(colour_text,colour_text_light)
+  }
+    
+  theme(
+    # Border and margin
+    plot.margin = margin(0.4, 0.6, 0.4, 0.4, "cm"),
+    panel.border = element_rect(colour = colour_box, fill = NA, linetype = 2),
+    
+    # background
+    panel.background = element_rect(fill = colour_background),
+    plot.background = element_rect(fill = colour_background),
+    strip.background = element_rect(fill = colour_background),
+    
+    rect = element_rect(fill = colour_background, colour = "white",
+                        size = 0.5, linetype = 1),
+    
+    # grid
+    panel.grid.major.x = element_line(colour = colour_lines, linetype = 5, size = 0.25),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y =  element_line(colour = colour_lines, linetype = 5, size = 0.25),
+    panel.grid.minor.y = element_blank(),
+    axis.ticks = element_line(colour = colour_text),
+    
+    # line
+    line = element_line(colour = colour_palette_standard),
+    
+    # text
+    text = element_text(colour = colour_text, face = "italic", family = "mono"),
+    plot.title = element_text(colour = colour_text_light, face = "bold", family = "mono"),
+    plot.subtitle = element_text(colour = colour_text, family = "mono", hjust = 0.01),
+    plot.caption = element_text(colour = colour_text, face = "italic", family = "mono"),
+    axis.text.y = element_text(colour = colour_text, face = "italic", family = "mono"),
+    axis.text.x = element_text(colour = colour_text_x_axis, face = "italic", family = "mono"),
+    axis.title = element_text(colour = colour_text_light, family = "mono"),
+    plot.tag = element_text(colour = colour_text, face = "italic", family = "mono"),
+    legend.text = element_text(color = colour_text,face = "italic", family = "mono"),
+    legend.title = element_text(colour = colour_text, face = "italic", family = "mono"),
+    strip.text = element_text(colour = colour_text_light, face = "bold", family = "mono"),
+    
+    # legend
+    legend.position = ledgend_pos,
+    legend.key = element_rect(fill = colour_background)
+  )
+}
+
+```
+
+# Oppgave I: Timeverksproduktivitet i markedsrettede fastlandsnæringer
+
+Reproduser en oppdatert versjon av Figur 1.1 "Timeverksproduktivitet, markedsrettede fastlandsnæringer" i rapporten. Her er produktivitet målt som bruttoprodukt i markedsrettet produksjon i Fastlands-Norge per timeverk, utenom bolig.
+
+## Oppgave Ia
+
+Hvorfor trekker Produktivitetskommisjon fra produksjonen av boligtjenester, offentlig etterspørsel, og inntekter fra olje og gass når de beregner produktivitet?
+
+*\[Svar på oppgave Ia her\]*
+
+Olje og gass er tad ut fordi de ville ha en bedre model får sammenligning av internasjonal data
+
+Bolig og offentlig sektor er trekket fra fordi det omsettes ikke på samme måtte og er derfor kalkulert på en annen måtte
+
+## Oppgave Ib
+
+Skriv kode som bruker en JSON-spørring til å lage en oppdatert versjon av figuren, med observasjoner fra 1996 til 2021. Beregn gjennomsnittlig årlig endring for perioden 1996 - 2005 og, 2005-2013, og 2006 - 2021. Står konklusjonen i rapporten seg?
+
+**Merknad.** Det er tidvis store revisjoner i nasjonalregnskapet. Du må regne med at individuelle tall på årlig endring kan avvike en god del, opp til et halvt prosentpoeng, mens de gjennomsnittlige veksttallene burde avvike noe mindre.
+
+**Tips:** Du henter data på timeverk og bruttoprodukt fra henholdsvis tabell 09174 og 09170.
+
+```{r}
+
+url <- c("https://data.ssb.no/api/v0/no/table/09170/","https://data.ssb.no/api/v0/no/table/09174/")
+
+query <- c('{
+  "query": [
+    {
+      "code": "NACE",
+      "selection": {
+        "filter": "vs:NRNaeringPubAgg",
+        "values": [
+          "pub2X68B",
+          "nr24_5",
+          "nr23fn"
+        ]
+      }
+    },
+    {
+      "code": "ContentsCode",
+      "selection": {
+        "filter": "item",
+        "values": [
+          "BNPB2",
+        ]
+      }
+    },
+    {
+      "code": "Tid",
+      "selection": {
+        "filter": "item",
+        "values": [
+          "1995",
+          "1996",
+          "1997",
+          "1998",
+          "1999",
+          "2000",
+          "2001",
+          "2002",
+          "2003",
+          "2004",
+          "2005",
+          "2006",
+          "2007",
+          "2008",
+          "2009",
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021"
+        ]
+      }
+    }
+  ],
+  "response": {
+    "format": "json-stat2"
+  }
+}','{
+  "query": [
+    {
+      "code": "NACE",
+      "selection": {
+        "filter": "vs:NRNaeringPubAgg",
+        "values": [
+          "pub2X68B",
+          "nr24_5",
+          "nr23fn"
+        ]
+      }
+    },
+    {
+      "code": "ContentsCode",
+      "selection": {
+        "filter": "item",
+        "values": [
+          "Timeverk",
+          "BruttoprodTimev"
+        ]
+      }
+    },
+    {
+      "code": "Tid",
+      "selection": {
+        "filter": "item",
+        "values": [
+          "1995",
+          "1996",
+          "1997",
+          "1998",
+          "1999",
+          "2000",
+          "2001",
+          "2002",
+          "2003",
+          "2004",
+          "2005",
+          "2006",
+          "2007",
+          "2008",
+          "2009",
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021"
+        ]
+      }
+    }
+  ],
+  "response": {
+    "format": "json-stat2"
+  }
+}')
+
+for(n in range(1:2)){
+  hent_indeks.tmp <- url[n] %>%
+  POST(body = query[n], encode = "json")
+  
+  df <- hent_indeks.tmp %>%
+    content("text") %>%
+    fromJSONstat()%>%
+    as_tibble()
+  
+  if(n == 1){
+    df_brutto <- df}
+  else{
+    df_timevekt <- df
+  }
+  rm(df)
+}
+
+#Note: Does seem like df2 is all that is needed if I understand the assignment
+# df2 == table 09174 - Bruttoprodukt per utførte timeverk.
+```
+
+```{r}
+# cleaning of data
+df_brutto<-df_brutto %>%
+  rename(year = år, measure = statistikkvariabel, industry = næring)
+df_timevekt<-df_timevekt %>%
+  rename(year = år, measure = statistikkvariabel, industry = næring)
+
+
+df_brutto_tv_change_percent <- df_timevekt %>%
+  filter(year != 1995,measure == "Bruttoprodukt per utførte timeverk. Endring fra året før (prosent). Faste priser", industry == "¬ Markedsrettet virksomhet Fastlands-Norge")%>%
+  select(year,value)
+```
+
+```{r}
+# solution 1, unsure if this is the correct way
+#avereage change
+
+get_average <- function(year_start,year_end){
+    return(sum(df_brutto_tv_change_percent %>%
+             filter(year %in% (year_start:year_end))%>%
+               select(value))/(year_end-year_start+1))
+}
+
+avereage_change_96_05 = get_average(1996,2005)
+avereage_change_05_13 = get_average(2005,2013)
+avereage_change_06_21 = get_average(2006,2021)
+
+avereage_change_96_05_line <- data.frame(x1 = 0.5, x2 = 10.5, y1 = avereage_change_96_05, y2 = avereage_change_96_05)
+
+avereage_change_05_13_line <- data.frame(x1 = 9.5, x2 = 18.5, y1 = avereage_change_05_13, y2 = avereage_change_05_13)
+
+avereage_change_06_21_line <- data.frame(x1 = 10.5, x2 = 26.5, y1 = avereage_change_06_21, y2 = avereage_change_06_21)
+
+
+# Graph
+y_label = "Percent change"
+x_label = "Year (1996-2021)"
+title_label = "Timeverksproduktivitet, markedsrettede fastlandsnæringer"
+subtitle_label = "Line = Average change from 96-05, 05-13, and 06-21"
+caption_label = "Source: accessed 11/22, (https://www.ssb.no/statbank/table/09174)"
+#Note to self for later use, dobble check if this was the right way to add sources
+
+df_brutto_tv_change_percent %>%
+  ggplot(aes(x=year,y=value)) %>%+
+  geom_bar(stat="identity", fill = "#ffa822") +
+  geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2), data = avereage_change_96_05_line, linetype="solid",colour = "#2b2b2b",size=1)+
+  geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2), data = avereage_change_96_05_line, linetype="dashed",colour = "#FFE9E3",size=0.75)+
+  geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2), data = avereage_change_05_13_line,linetype="solid",colour = "#2b2b2b",size=1)+
+  geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2), data = avereage_change_05_13_line,linetype="dashed",colour = "#FFE9E3",size=0.75)+
+  geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2), data = avereage_change_06_21_line,linetype="solid",colour = "#2b2b2b",size=1)+
+  geom_segment(aes(x = x1, y = y1, xend = x2, yend = y2), data = avereage_change_06_21_line,linetype="dashed",colour = "#FFE9E3",size=0.75)+
+  annotate("text",x=3.5,y=avereage_change_96_05+0.4, label=paste0(avereage_change_96_05,"%"),color="#FFE9E3")+
+  annotate("text",x=13,y=avereage_change_05_13+0.4, label=paste0(round(avereage_change_05_13,2),"%"),color="#FFE9E3")+
+  annotate("text",x=20,y=avereage_change_06_21+0.4, label=paste0(round(avereage_change_06_21,2),"%"),color="#FFE9E3")+
+  scale_y_continuous(n.breaks = 10,labels = function(x) paste0(x,"%")) +
+  labs(y = y_label, x = x_label, title = title_label, subtitle = subtitle_label, caption = caption_label)+
+  hod_theme(alter_x_axis_colour = TRUE)+theme(axis.text.x = element_text(angle = 75, vjust = 0.5, hjust=0.5),plot.title = element_text(size=12))
+
+```
+
+```{r}
+#Solutuin 2
+# test
+#df_timevekt_2 <- subset(df_timevekt, industry != "¬ Offentlig forvaltning")
+#df_brutto_2 <- subset(df_brutto, industry != "¬ Offentlig forvaltning")
+df_timevekt_2 <- df_timevekt
+df_brutto_2 <- df_brutto
+
+df_timevekt_2 <- subset(df_timevekt_2, measure != "Bruttoprodukt per utførte timeverk. Endring fra året før (prosent). Faste priser")
+
+df_timevekt_2 <- df_timevekt_2 %>%
+  pivot_wider(names_from=industry, values_from = value)
+
+df_brutto_2 <- subset(df_brutto_2, select = -c(measure))
+
+df_brutto_2 <- df_brutto_2 %>%
+  pivot_wider(names_from=industry, values_from = value)
+
+df_brutto_2 <- df_brutto_2%>%
+  mutate(total = df_brutto_2$`¬ Markedsrettet virksomhet Fastlands-Norge`-df_brutto_2$`Boligtjenester, egen bolig`)
+
+
+df_timevekt_2 <- df_timevekt_2%>%
+  mutate(total = df_timevekt_2$`¬ Markedsrettet virksomhet Fastlands-Norge`-df_timevekt_2$`Boligtjenester, egen bolig`)
+df_timevekt_2 <- subset(df_timevekt_2, measure == "Utførte timeverk for lønnstakere og selvstendige (mill. timeverk)")
+df_timevekt_2 <- subset(df_timevekt_2, select = -c(measure))
+
+df3 <- cbind(df_brutto_2,df_timevekt_2)
+df3 <- df3 %>%
+  relocate("total", .after=last_col())
+df3 <- subset(df3, select = -c(year.1))
+df3 <- df3 %>%
+  mutate(div = df3$total.1/df3$total)
+df3 <- df3%>%
+  mutate(diff = (div-lag(div,1))/div*100)
+```
+
+```{r}
+
+#Graph 2
+#avereage change
+
+get_average <- function(year_start,year_end){
+    return(sum(df3 %>%
+             filter(year %in% (year_start:year_end))%>%
+               select(diff))/(year_end-year_start+1))
+}
+
+avereage_change_96_05 = get_average(1996,2005)
+avereage_change_05_13 = get_average(2005,2013)
+avereage_change_06_21 = get_average(2006,2021)
+
+avereage_change_96_05_line <- data.frame(x1 = 0.5, x2 = 10.5, y1 = avereage_change_96_05, y2 = avereage_change_96_05)
+
+avereage_change_05_13_line <- data.frame(x1 = 9.5, x2 = 18.5, y1 = avereage_change_05_13, y2 = avereage_change_05_13)
+
+avereage_change_06_21_line <- data.frame(x1 = 10.5, x2 = 26.5, y1 = avereage_change_06_21, y2 = avereage_change_06_21)
+
+
+# Graph
+y_label = "Percent change"
+x_label = "Year (1996-2021)"
+title_label = "Timeverksproduktivitet, markedsrettede fastlandsnæringer"
+subtitle_label = "Line = Average change from 96-05, 05-13, and 06-21"
+caption_label = "Source: accessed 11/22, (https://www.ssb.no/statbank/table/09174)"
+#Note to self for later use, dobble check if this was the right way to add sources
+
+df3 %>%
+  filter(year != 1995)%>%
+  ggplot(aes(
+    x=year,
+    y=diff)) %>%+
+  geom_bar(stat="identity", 
+           fill = "#ffa822") +
+  geom_segment(aes(
+    x = x1, 
+    y = y1, 
+    xend = x2, 
+    yend = y2), 
+    data = avereage_change_96_05_line, 
+    linetype="dashed",
+    colour = "#FFE9E3",
+    size=1)+
+  geom_segment(aes(
+    x = x1, 
+    y = y1, 
+    xend = x2, 
+    yend = y2), 
+    data = avereage_change_05_13_line,
+    linetype="dashed",
+    colour = "#FFE9E3",size=1)+
+  geom_segment(aes(
+    x = x1, 
+    y = y1, 
+    xend = x2,
+    yend = y2), 
+    data = avereage_change_06_21_line,
+    linetype="dashed",
+    colour = "#FFE9E3",
+    size=1)+
+  annotate("text",
+           x=3.5,
+           y=avereage_change_96_05+0.4, 
+           label=paste0(round(avereage_change_96_05,2),"%"),
+           color="#FFE9E3")+
+  annotate("text",
+           x=13,
+           y=avereage_change_05_13+0.4, 
+           label=paste0(round(avereage_change_05_13,2),"%"),
+           color="#FFE9E3")+
+  annotate("text",
+           x=20,
+           y=avereage_change_06_21+0.4, 
+           label=paste0(round(avereage_change_06_21,2),"%"),
+           color="#FFE9E3")+
+  scale_y_continuous(
+    n.breaks = 10,
+    labels = function(x) paste0(x,"%")) +
+  labs(y = y_label, 
+       x = x_label, 
+       title = title_label, 
+       subtitle = subtitle_label, 
+       caption = caption_label)+
+  hod_theme(alter_x_axis_colour = TRUE)+theme(axis.text.x = element_text(angle = 75, vjust = 0.5, hjust=0.5),plot.title = element_text(size=12))
+```
