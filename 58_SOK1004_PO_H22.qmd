@@ -1,0 +1,550 @@
+---
+title: “58_SOK1004_PO_H22”
+
+author: “58”
+
+format: pdf
+
+echo: true
+
+output: true
+
+editor: visual
+---
+
+**Even Hvinden**
+
+Oppklarende spørsmål kan rettes til [even.c.hvinden\@uit.no](mailto:even.c.hvinden@uit.no). Jeg retter en stor takk til Jørgen Modalsli for å ha delt data på inntektsfordeling.
+
+# Instruksjoner
+
+Prosjektoppgaven skal leveres som `.pdf` i WiseFlow. Det ferdige dokumentet lagres som `[kandidatnummer]_SOK1004_PO_H22.pdf`. Hvis du har kandidatnummer 43, så vil filen hete `43_SOK1004_PO_H22.pdf`. Det er ingen begrensning på hvilken programvare dere benytter til å lage besvarelsen. Men figurer og utregninger skal gjøres i RStudio og dokumenteres ved hjelp av en en `.qmd`-fil som kompileres som en `.pdf` og inkluderes som vedlegg i besvarelsen.
+
+Merk at prosjektoppgaven består av tre oppgaver. Vekttallene er oppgitt i prosent.
+
+Prosjektoppgaven kan besvares alene eller i grupper på opptil tre personer. Det er ikke lov å samarbeide på tvers av grupper, og hvert gruppemedlem må levere besvarelsen i WiseFlow. Grupper anbefales å undertegne en [samarbeidsavtale](https://github.com/uit-sok-1004-h22/uit-sok-1004-h22.github.io/blob/main/eksamen/Samarbeidsavtale%20for%20gruppearbeid%20SOK1004.pdf).
+
+**NB!** Besvarelser som ikke oppfyller disse kravene vil ikke bli vurdert.
+
+# Last inn pakker og data
+
+```{r, output: false}
+
+rm(list=ls()) 
+library(tidyverse)
+library(ggthemes)
+library(openxlsx)
+library(ggpubr)
+
+# A custome theme I use
+hod_theme <- function(alter_x_axis_colour = FALSE,
+                      ledgend_pos = "right") {
+  
+  colour_text <- "#b8aba7"
+  colour_text_light <- "#FFE9E3"
+  colour_box <- "#2b2b2b"
+  colour_lines <- "#827974"
+  colour_main <- "#E9D5DA"
+  colour_background <- "#2b2b2b"
+  colour_palette_standard <- c("#ffa822", "#ff6150","#1ac0c6")
+  colour_text_x_axis <- colour_text
+  
+  if(alter_x_axis_colour){
+     colour_text_x_axis <- c(colour_text,colour_text_light)
+  }
+    
+  theme(
+    # Border and margin
+    plot.margin = margin(0.4, 0.6, 0.4, 0.4, "cm"),
+    panel.border = element_rect(colour = colour_box, fill = NA, linetype = 2),
+    
+    # background
+    panel.background = element_rect(fill = colour_background),
+    plot.background = element_rect(fill = colour_background),
+    strip.background = element_rect(fill = colour_background),
+    
+    rect = element_rect(fill = colour_background, colour = "white",
+                        size = 0.5, linetype = 1),
+    
+    # grid
+    panel.grid.major.x = element_line(colour = colour_lines, linetype = 5, size = 0.25),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y =  element_line(colour = colour_lines, linetype = 5, size = 0.25),
+    panel.grid.minor.y = element_blank(),
+    axis.ticks = element_line(colour = colour_text),
+    
+    # line
+    line = element_line(colour = colour_palette_standard),
+    
+    # text
+    text = element_text(colour = colour_text, face = "italic", family = "mono"),
+    plot.title = element_text(colour = colour_text_light, face = "bold", family = "mono"),
+    plot.subtitle = element_text(colour = colour_text, family = "mono", hjust = 0.01),
+    plot.caption = element_text(colour = colour_text, face = "italic", family = "mono"),
+    axis.text.y = element_text(colour = colour_text, face = "italic", family = "mono"),
+    axis.text.x = element_text(colour = colour_text_x_axis, face = "italic", family = "mono"),
+    axis.title = element_text(colour = colour_text_light, family = "mono"),
+    plot.tag = element_text(colour = colour_text, face = "italic", family = "mono"),
+    legend.text = element_text(color = colour_text,face = "italic", family = "mono"),
+    legend.title = element_text(colour = colour_text, face = "italic", family = "mono"),
+    strip.text = element_text(colour = colour_text_light, face = "bold", family = "mono"),
+    
+    # legend
+    legend.position = ledgend_pos,
+    legend.key = element_rect(fill = colour_background)
+  )
+}
+
+
+url <- "https://modals.li/downloads/gini_series_norway.xlsx"
+
+df_gini <- url %>%  
+  read.xlsx(sheet=1) %>% 
+  as_tibble()
+
+df_gini_navn <- df_gini %>% 
+  names()
+
+df_gini<- df_gini %>%
+  pivot_longer(!year,
+               names_to = "var", 
+               values_to = "verdi")
+
+url <- "https://github.com/uit-sok-1004-h22/uit-sok-1004-h22.github.io/blob/main/rkode/inntektsandeler.xlsx?raw=true"
+  
+df_andeler <- url %>%  
+  read.xlsx() %>% 
+  as_tibble()  
+
+df_andeler_navn <- df_gini %>% 
+  names()
+
+df_andeler <- df_andeler %>%
+  pivot_longer(!year,
+               names_to = "var", 
+               values_to = "verdi")
+
+df_andeler <- df_andeler %>% 
+  filter(year>=1875)
+
+url <- "https://github.com/uit-sok-1004-h22/uit-sok-1004-h22.github.io/blob/e36b270c865e077f797e9426e32b47740f2f3847/rkode/bnp.xlsx?raw=true"
+
+df_bnp <- url %>%  
+  read.xlsx(sheet=1) %>% 
+  as_tibble()
+
+navn_BNP <- df_bnp %>% 
+  names()
+
+df_bnp <- df_bnp %>% 
+  rename(BNP = navn_BNP[2],
+         year = navn_BNP[1])
+
+df_bnp <- df_bnp %>% 
+  mutate(DLBNP = 100*(log(BNP)-lag(log(BNP))))
+
+df_bnp <- df_bnp %>% 
+  filter(year >= 1875)
+```
+
+# Bakgrunn
+
+I norsk økonomisk historie blir årene 1920 - 1930 beskrevet som harde. Les avsnittene om arbeidsløshet og inflasjon, paripolitikken, streiker og arbeidskonflikter i [artikkelen om mellomkrigstiden](https://snl.no/Norges_historie_fra_1905_til_1939) i Store norske leksikon. Se også [deres artikkel om paripolitikk](https://snl.no/paripolitikk).
+
+I denne prosjektoppgaven skal vi analysere utviklingen i norsk økonomi gjennom historiske data fra Norges Bank og Statistisk sentralbyrå. Vi vil også bruke data fra artikkelen [Estimating long-run income inequality from mixed tabular data: Empirical evidence from Norway, 1875-2017](https://www.sciencedirect.com/science/article/pii/S0047272720300608) av Jørgen Modalsli, Rolf Aaberge, og Anthony B. Atkinson, publisert i *Journal of Public Economics* i 2021.
+
+# Bedømmelse
+
+Formålet med oppgave er å utfordre dere til å gi en deskriptiv analyse av sammensatte økonomiske data gjennom visualisering og grunnleggende økonomisk teori. En god besvarelse er kjennetegnet av følgende trekk.
+
+1.  Egenskapene til data visualiseres i gode figurer. En god figur har presist definerte enheter, fornuftig skalering, og illustrerer tydelig relevante trekk ved dataene. Bedømmelsen vil vektlegge en tydelig beskrivelse av figurene. Figurer bør ikke overbelastes med innhold og kan gjerne være vakre.
+
+2.  Besvarelsen svarer konkret på oppgaven med et konsist og presist språk. Påstander om årsakssammenhenger underbygges med argumenter og kildehenvisninger.
+
+3.  Koden som lagde figurene er korrekt og godt dokumentert.
+
+# Oppgave I - 20%
+
+**Spørsmål:** Beskriv hvordan ulikheten og veksten i inntekter utviklet seg i 1920-årene sammenlignet med øvrige perioder.
+
+**Hint.** Det kan være nyttig å endre koden for å se nærmere på bestemte tidsintervaller.
+
+**Merknad:** Anta at estimatet av BNP og Gini-koeffisienten i figuren er sann. Det er ikke nødvendig å diskutere metoden Norges Bank og Modalsli, Aaberge og Atkinson (2021) har brukt til å estimere BNP og Gini-koeffisienten eller den statistiske usikkerheten rundt estimatet.
+
+Betrakt følgende figurer.
+
+```{r}
+# small change done to this code block, just so I can render two different versions
+
+draw_gini <- function(year_range){
+  df_gini %>%
+    filter(year %in% year_range) %>%
+    filter(var %in% df_gini_navn[4]) %>%
+    ggplot(aes(x=year,y=verdi)) +
+    geom_line() +
+    geom_smooth() +
+    ylim(0.25,0.75) +
+    theme_bw() +
+    labs(title = "Gini-koeffisienter for inntektsfordelingen i Norge",
+         subtitle = paste(sprintf("%d-%d",year_range[1],year_range[length(year_range)]),". Gjennomsnitt av øvre og nedre grense."),
+         y="Gini-koeffisient",
+         x="År",
+         caption = "Kilde: Modalsli, Aaberge og Atkinson (2021)")}
+
+draw_gini(c(1875:2017)) # original version
+draw_gini(c(1915:1935)) # zoom
+draw_gini(c(1920:1930)) # zoom 2
+```
+
+#### Svar
+
+Figuren viser endringer i gini koeffisient for inntektsfordeling.
+
+Figuren viser en kraftig drop fra 1940 til 1960, og med en gradevis okning etter.
+
+Med fokus paa 1920-1930 saa ser vi at ginien ikke endrer seg mye i de 10 aarende, den ligger relativt stabilt paa 0.55-0.6
+
+```{r}
+# small change done to this code block, just so I can render two different versions
+
+draw_bnp <- function(year_range){
+  df_bnp %>%
+    filter(year %in% year_range) %>%
+    mutate(BNP = log(BNP)) %>% 
+    ggplot(aes(x=year,y=BNP)) +
+    geom_line() +
+    geom_smooth() +
+    theme_bw() +
+    labs(title = "BNP per person",
+         subtitle = paste("Log faste-2005 kroner. ",sprintf("%d-%d",year_range[1],year_range[length(year_range)])),
+         y="BNP per person",
+         x="År",
+         caption = "Kilde: Norges Bank")}
+
+draw_bnp(c(1875:2017)) # original version
+draw_bnp(c(1915:1935)) # zoom
+draw_bnp(c(1920:1930)) # zoom 2
+```
+
+#### svar
+
+Figuren viser BNP endringer over aar fra 1875-2017, i log med verdi sotte i 2005.
+
+Figuren har en stabil okning med en utflatning nermere 2020
+
+Med fokus paa 1920-1930, saa ser vi at decade begyner med en drop, etterf;lgt av en mer stabil vekst fra 1922.
+
+```{r}
+# small change done to this code block, just so I can render two different versions
+
+draw_bnp_year_change <- function(year_range){
+  df_bnp %>%
+    filter(year %in% year_range) %>%
+    ggplot(aes(x=year,y=DLBNP)) +
+    geom_line() +
+    geom_smooth() +
+    theme_bw() +
+    labs(title = "BNP per person",
+         subtitle = paste("Årlig endring. Log faste-2005 kroner. ",sprintf("%d-%d",year_range[1],year_range[length(year_range)])),
+         y="BNP per person",
+         x="År",
+         caption = "Kilde: Norges Bank")}
+
+
+draw_bnp_year_change(c(1875:2017)) # original version
+draw_bnp_year_change(c(1915:1935)) # zoom
+draw_bnp_year_change(c(1920:1930)) # zoom 2
+```
+
+#### svar
+
+Figuren viser aarlige endringer i BNP per person i log, med fastsat verdi i 2005.
+
+Figuren viser generelt en endring paa 5 paa noen faa aar, med 1915-1950 som de mest turbulete aarende der BNP endrer seg kraftig fra aar t aar.
+
+Med fokus paa 1920-1930 ser vi at vi begynner mid i en kraftig nedgang, som startet i 1918-1919. Deretter ser vi en ny oppgang fra 1921 til 1922 som er nesten 4 ganger store en den normale endringene fra aar t aar.
+
+Mesteparten av tiden har figuren vært over 0 så BNP hadde en liten vekst.
+
+# Oppgave II - 20%
+
+I `df_andeler` er det lagret inntektsandeler fordelt på desil og år. Merk at dette er tallene bak Figur A9 i vedleggene til MAA, tilgjengelig [her](https://ars.els-cdn.com/content/image/1-s2.0-S0047272720300608-mmc1.pdf). For eksempel viser `share_10_20` hvor stor andel av den totale inntekten som gikk til intervallet mellom tiende- og tyvende persentil. I følgende figur kombinerer jeg BNP-tallene fra oppgave I med inntektsandelen til å beregne gjennomsnittlig inntekt per person, fordelt på desil og år.
+
+Betrakt følgende figurer.
+
+**Merknad.** Inntektene må skaleres når vi beregner andeler. La $a_{x-y,t}$ være inntektsandelen til intervallet mellom $x$ og $y$ i år $t$. BNP per person i år $t$ er gitt ved $\text{bnp}_{t}$ og er lagret i `df_bnp`. For eksempel så vil $a_{50-60,2005}$ og $bnp_{2005}$ være gitt ved `df_andeler$share_50_60` og `df_bnp$BNP` når `year` er lik `2005`. Da vil gjennomsnittlig inntekt i intervallet være gitt ved $$a_{x-y,t}\times\frac{100}{x-y}\times \text{bnp}_{t}.$$
+
+```{r}
+#| output: false
+
+# ny tabell hvor vi skal beregne inntekter
+df <- df_andeler 
+
+# lagrer en liste med årene hvor vi har observasjoner med inntektsandeler
+years_list <- df$year %>% 
+  unique()
+
+# wide-format er enklere
+df <- df %>% 
+  pivot_wider(names_from = var, values_from = verdi) 
+
+# ny tabell med bnp-tall for årene hvor vi har observasjoner
+df_temp <- df_bnp %>% 
+  filter(year %in% years_list)
+
+# anstendige navn
+df <- df %>%
+  rename("0-10" = "share_0_10",
+         "10-20" = "share_10_20",
+         "20-30" = "share_20_30",
+         "30-40" = "share_30_40",
+         "40-50" = "share_40_50",
+         "50-60" = "share_50_60",
+         "60-70" = "share_60_70",
+         "70-80" = "share_70_80",
+         "80-90" = "share_80_90",
+         "90-100" = "share_90_100",
+         "90-99" = "share_90_99",
+         "99-100" = "share_99_100")
+
+# lagrer navn
+df_navn <- df %>% 
+  names()
+
+df <- df %>% 
+  mutate(`0-10`=10*`0-10`*df_temp$BNP,
+         `10-20`  = (100/10)*`10-20`*df_temp$BNP,
+         `20-30`  = (100/10)*`20-30`*df_temp$BNP,
+         `30-40`  = (100/10)*`30-40`*df_temp$BNP,
+         `40-50`  = (100/10)*`40-50`*df_temp$BNP,
+         `50-60`  = (100/10)*`50-60`*df_temp$BNP,
+         `60-70`  = (100/10)*`60-70`*df_temp$BNP,
+         `70-80`  = (100/10)*`70-80`*df_temp$BNP,
+         `80-90`  = (100/10)*`80-90`*df_temp$BNP,
+         `90-100` = (100/10)*`90-100`*df_temp$BNP,
+         `90-99`  = (100/9)*`90-99`*df_temp$BNP,
+         `99-100` = (100/1)*`99-100`*df_temp$BNP,)
+
+df <- df %>%
+  pivot_longer(!year,
+               names_to = "var", 
+               values_to = "verdi")
+
+andeler <- df$var %>% 
+  unique()
+```
+
+```{r}
+# small change done to this code block, just so I can render two different versions
+
+draw_bnp_desil <- function(year_range){
+  df %>% 
+    filter(year %in% year_range) %>% 
+    filter(var %in% andeler[1:10]) %>% 
+    mutate(verdi=verdi/(10^5)) %>%
+    ggplot(aes(x=year,y=verdi,color=var)) +
+    geom_line(size=1.25) +
+    labs(title = "BNP per person",
+         subtitle = paste("Hundretusener faste 2005-kroner. Fordelt på inntektsdesiler",sprintf("%d-%d",year_range[1],year_range[length(year_range)])),
+         y = "BNP per person",
+         x = "År",
+         color = "Desil",
+         caption = "Kilder: Modalsli, Aaberge og Atkinson (2021), Norges Bank") +
+  theme_bw()}
+
+draw_bnp_desil(c(1900:1930)) # original version
+draw_bnp_desil(c(1920:1930)) # zoom
+```
+
+```{r}
+# small change done to this code block, just so I can render two different versions
+
+draw_bnp_desil_log <- function(year_range){
+  df %>% 
+    filter(year %in% year_range) %>% 
+    mutate(verdi=log(verdi)) %>% 
+    filter(var %in% andeler[1:10]) %>% 
+    
+    ggplot(aes(x=year,
+               y=verdi,
+               color=var)) +
+    
+    geom_line(size=1.25) +
+    
+    labs(title = "Log BNP per person", 
+         subtitle = paste("Faste 2005-kroner. Fordelt på inntektsdesiler.",sprintf("%d-%d",year_range[1],year_range[length(year_range)])),
+         y = "Log BNP per person",
+         x = "År",
+         color =  "Desil",
+         caption = "Kilder: Modalsli, Aaberge og Atkinson (2021), Norges Bank") +
+  theme_bw()}
+
+draw_bnp_desil_log(c(1900:1930)) # original version
+draw_bnp_desil_log(c(1920:1930)) # zoom
+```
+
+```{r}
+# added so that I gave all the graphs one place
+
+draw_bnp_desil(c(1900:1930)) # original version
+draw_bnp_desil(c(1920:1930)) # zoom
+draw_bnp_desil_log(c(1900:1930)) # original version
+draw_bnp_desil_log(c(1920:1930)) # zoom
+```
+
+**Spørsmål:** Beskriv hvordan endringen i reelle inntekter fordelte seg på inntektsdesiler mellom 1920 og 1930.
+
+#### svar
+
+Figurene viser BNP per person delt på desil, en av figurene er i log from.
+
+figurene viser mye av det samme, det er relativt lite endringer får de 10 årende. Siden figuren er delt på desil så kan vi se at de bottom 70% er reltaivt flat, med litt vekst fra de bottom 30% or en nedgang i BNP for 60-70 desil.
+
+De top 30% er de som har had mest endringer, med top 20% har had sterk økning og 70-80 desil hadde en nedgang i BNP etter 1925.
+
+# Oppgave III - 60%
+
+Dere skal nå presentere og beskrive utviklingen i to ytterligere økonomiske forhold som kjennetegnet de harde 1920-årene. Jeg anbefaler å bruke følgende kilder til å finne data:
+
+-   [Historisk statistikk fra Norges Bank](https://www.norges-bank.no/en/topics/Statistics/Historical-monetary-statistics/)
+
+-   [Historisk statistikk fra SSB](https://www.ssb.no/a/histstat/)
+
+Her følger fire eksempler på tema dere kan, men ikke nødvendigvis må velge. Lenkene leder til definisjonen i SNL, og dataene finnes i de ovennevnte kildene.
+
+-   [Realrente](https://snl.no/realrente)
+
+-   [Utlån (kreditt) fra banker](https://snl.no/utlån)
+
+-   [Arbeidsledighet](https://snl.no/arbeidsledighet)
+
+-   [Arbeidskonflikter og streik](https://snl.no/streik)
+
+I besvarelsen skal dere forklare hvorfor dataene er relevante og gi en grundig beskrivelse av deres utvikling. Lengden på besvarelsen skal være på 750 - 1500 ord.
+
+#### Besvarelse
+
+Bestemete meg for aa fokusere paa Arbeidsledighet i 1920-1930
+
+```{r}
+# PDF data
+# Link to data
+# https://www.ssb.no/a/histstat/hs1968.pdf page 81 or slide 97
+
+Arbeidslose_df <- data.frame (
+  Year = c(1915:1950),
+  Average_percent = c(2.1,0.8,0.9,1.4,1.6,2.3,17.6,17.1,10.6,8.5,13.2,24.3,25.4,19.1,15.4,16.6,22.3,30.8,33.4,30.7,25.3,18.8,20.0,22.0,18.3,23.1,11.4,NA,NA,NA,NA,3.6,3.1,2.7,2.2,2.7)
+)
+
+```
+
+```{r}
+# Create graphs
+
+graph_Arbeidslose_df <- function(year_range, text_offset){
+  #Graph Label
+  title_label <- paste("Unemployment ",sprintf("%d-%d",year_range[1],year_range[length(year_range)]))
+  subtitle_label <- "Average from registrated trade unionists members."
+  caption_label = "Source: accessed 12/22, (https://www.ssb.no/a/histstat/hs1968.pdf)\nYear 2024 is uncertain because of the conflict in the iron and steel industries"
+  y_label <- "Percent"
+  x_label <- paste("Year ",sprintf("%d-%d",year_range[1],year_range[length(year_range)]))
+  
+  #Data Values
+  largest_value = max(Arbeidslose_df %>%
+  filter(Year %in% year_range) %>%
+    replace(is.na(.), 0) %>%
+      select(Average_percent))
+  
+  largest_value_year = Arbeidslose_df$Year[which(Arbeidslose_df$Average_percent == largest_value)]
+  
+  average_value = Arbeidslose_df %>%
+  filter(Year %in% year_range) %>%
+    select(Average_percent)
+  average_value_lenght = sum(!is.na(average_value))
+  average_value_total = sum(average_value %>% drop_na())
+  average_value = average_value_total/average_value_lenght
+
+
+  top_line <- data.frame(x1 = min(year_range), x2 = largest_value_year, y1 = largest_value, y2 = largest_value)
+  
+  avrage_line <- data.frame(x1 = min(year_range), x2 = max(year_range), y1 = average_value, y2 = average_value)
+  
+  tick_colour <- ifelse(year_range == 1924, "#ff6150", c("#b8aba7","#FFE9E3"))
+  cap_colour <- ifelse(caption_label == "1924", "#ff6150", "#b8aba7")
+
+
+  
+  #Graph
+  Arbeidslose_df %>%
+    filter(Year %in% year_range) %>% 
+    ggplot(aes(x=Year, y=Average_percent)) %>% +
+    geom_line(color ="#ffa822")+
+    labs(y = y_label, x = x_label, title = title_label, subtitle = subtitle_label, caption = caption_label)+
+    scale_x_continuous(breaks = Arbeidslose_df$Year)+
+    geom_segment(aes(
+      x = x1, 
+      y = y1, 
+      xend = x2, 
+      yend = y2), 
+      data = top_line, 
+      linetype="dashed",colour = "#FFE9E3",size=0.75)+
+    geom_vline(xintercept = 1924,linetype="dashed",colour = "#ff6150")+
+    geom_segment(aes(
+      x = x1, 
+      y = y1, 
+      xend = x2, 
+      yend = y2), 
+      data = avrage_line, 
+      linetype="dashed",colour = "#FFE9E3",size=0.75)+
+     annotate("text",
+              x=min(year_range)+text_offset[1],
+              y=average_value+text_offset[2],
+              label=paste0("Average: ",round(average_value,2)),
+              color="#FFE9E3")+
+    annotate("text",
+              x=min(year_range)+text_offset[1],
+              y=largest_value+text_offset[2],
+              label=paste0("Highest Point: ",round(largest_value,2)),
+              color="#FFE9E3")+
+    hod_theme(alter_x_axis_colour = TRUE)+theme(axis.text.x = element_text(angle = 75, vjust = 0.5, hjust=0.5,colour = tick_colour),plot.caption = element_text(colour = cap_colour))}
+
+graph_Arbeidslose_df(c(1915:1950), c(4,2)) # larger view (1915-1950)
+graph_Arbeidslose_df(c(1920:1930), c(1,-2)) # focus on 1920-1930
+```
+
+#### Answer/Explanation
+
+\-\-\-- Introduction to the figure \-\-\--
+
+-   What does the figure show
+
+I denne figuren ser vi den average arbeidsledigheten over flere ulike industrier i prosent fra år 1915 til 1950, med en versjon som er zoomed inn på 1920 til 1930. Figuren viser også det høyeste punktet av arbeidsledighet og den totale gjenomsnitt arbeidsledigheten fra start året til slutt året.
+
+-   høyeste punktet fra 1915 til 1950 er 33.4
+
+-   høyeste punktet fra 1920 til 1930 er 33.4
+
+-   Average arbeidsledighet fra 1915 til 1950 er 13.98
+
+-   Average arbeidsledighet fra 1920 til 1930 er 15.46
+
+```{=html}
+<!-- -->
+```
+-   What is it suppose to show
+
+Graphen er laget med inntent å vise hvor stor andel av registrerte trade unionist medlemer som er arbeidsløs fra år til år og hvordan det endrer seg.
+
+\-\-\-- Why this figure is relevant \-\-\--
+
+-   Where is the data from
+
+Dataen i graphen kommer fra SSB (statistik sentralbyrå), specific en PDF dem hadde kalt "hs1968" heller "Historisk Statistikk 1968" side 81 heller slide 97 i pdfen. Som man kan se i figuren fra 1915 til 1920 så ser man mangel på data i 1941 til 1945.
+
+-   What does the data say
+
+\-\-\-- How does the figure change \-\-\--
+
+-   How does the data change
+
+I figuren kan vi se at fra og med 1920 til 1933 så var det kraftig vekst av arbeidsledighet i arbeidsmarkedet.
