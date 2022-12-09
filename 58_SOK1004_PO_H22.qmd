@@ -543,7 +543,7 @@ graph_Arbeidslose_df <- function(year_range, text_offset, papir_x_pos){
     annotate("text",
             x=papir_x_pos,
             y=4.5,
-            label="paper politic",
+            label="paripolitikken",
             color="#FFE9E3",
             size=3.5,
             angle = 270,
@@ -599,15 +599,15 @@ I denne figuren ser vi den average arbeidsledigheten over flere ulike industrier
 
 Figuren viser også det høyeste punktet av arbeidsledighet og den totale gjenomsnitt arbeidsledigheten fra start året (1915 heller 1920) til slutt året (1930 heller 1950).
 
--   høyeste punktet fra 1915 til 1950 er 33.4
+-   høyeste punktet fra 1915 til 1950 er 33.4% arbeidsledighet
 
--   høyeste punktet fra 1920 til 1930 er 25.4
+-   høyeste punktet fra 1920 til 1930 er 25.4% arbeidsledighet
 
--   Average arbeidsledighet fra 1915 til 1950 er 13.98
+-   Average arbeidsledighet fra 1915 til 1950 er 13.98%
 
--   Average arbeidsledighet fra 1920 til 1930 er 15.46
+-   Average arbeidsledighet fra 1920 til 1930 er 15.46%
 
-Figuren har også en lyse grå shading som viser når papir politikken startet (1920) og sluttet (1928), det er også en sterkere shading får 1925 til 1928 siden papir politikken hadde mer inflytelse i de årende.
+Figuren har også en lyse grå shading som viser når paripolitikken startet (1920) og sluttet (1928), det er også en sterkere shading får 1925 til 1928 siden paripolitikken hadde mer inflytelse i de årende.
 
 I 1924 kan man se en rød linje i figuren som indikerer at datan som er sammlet for det året er usikker, slik som det står i teksten på bunden av figuren. Teksten der sier at i 1924 var det var en jernkonflikt i den tiden.
 
@@ -617,16 +617,6 @@ Graphen er laget med inntent å vise hvor stor andel av registrerte trade unioni
 
 link - https://www.ssb.no/a/histstat/hs1968.pdf
 
-\-\-\-- Why this figure is relevant \-\-\--
+I figurene ser vi at etter paripolitikken ble implemented ( 1920 ) så er det en sterk økning i arbeidsledighet, med en ny økning i 1925. 1925 var når de begynnte å være mer seriøs med paripolitikken, og vi ser at den fortsetter å øke til 1927. Arbeidsledighet dropper i fra 1927 til 1929, og paripolitikken sluttet i 1928 når norge gjeninnførte gull standaren i landet.
 
--   What does the data say
-
-\-\-\-- How does the figure change \-\-\--
-
--   How does the data change
-
-I figuren som viser data fra 1915-1950 kan vi se at fra og med 1920 til 1933 så var det kraftig vekst av arbeidsledighet i arbeidsmarkedet.
-
-\-\-\-- Sutff ----
-
-Etter 1922 ser vi en ny nedgang etterfølgt av en av de største oppgangene igjen i 1924 til 1927, der den går fra litt under 10% arbeidsledighet til det høyest punkte i 1920 tallet 25.4% arbeidsledighet.
+Men slik man kan se i den første figuren fra 1915 - 1950, så gikk ikke arbeidsløshet tilbake til det den var før 1920 før nermere 1940 der vi ser en stor nedgang. Siden data mangler fra 1941 til 1945 så kan æ ikke si noe om den tiden, men vi ser at etter andre verdenskrig ( 1945+ ) så er vi nesten tilbake til arbeidsledigheten det var før 1920.
