@@ -1,5 +1,5 @@
 ---
-title: “58_SOK1004_PO_H22”
+title: “SOK1004_PO_H22”
 
 author: “58”
 
@@ -439,13 +439,25 @@ Arbeidslose_df <- data.frame (
 ```
 
 ```{r}
-#
+Arbeidskonflikter <- data.frame(
+  Year = c(1922:1930),
+  TotalKonflikter_i_alt = c(26,57,61,84,113,96,63,73,94)
+)
+
+Arbeidslose_df <- merge(Arbeidslose_df, Arbeidskonflikter, by ="Year",all=TRUE)
+Arbeidslose_df["TotalKonflikter_i_alt"] <- Arbeidslose_df["TotalKonflikter_i_alt"] %>% replace(is.na(.), 0)
+
+p = 10
+
+Arbeidslose_df["Konflikter_i_20"] <- Arbeidslose_df["TotalKonflikter_i_alt"]*p/max(Arbeidslose_df["TotalKonflikter_i_alt"])
+  
+
 ```
 
 ```{r}
 # Create graphs
 
-graph_Arbeidslose_df <- function(year_range, text_offset, papir_x_pos){
+graph_Arbeidslose_df <- function(year_range, text_offset, papir_x_pos,bar = FALSE){
   #Graph Label
   title_label <- paste("Unemployment ",sprintf("%d-%d",year_range[1],year_range[length(year_range)]))
   subtitle_label <- "Average from registrated trade unionists members."
@@ -487,6 +499,12 @@ graph_Arbeidslose_df <- function(year_range, text_offset, papir_x_pos){
   ww_1_data_alpha = ifelse(1918 %in% year_range,0.85,0)
   ww_2_data_alpha = ifelse(1939 %in% year_range,0.05,0)
   ww_2_data_alpha_label = ifelse(1939 %in% year_range,0.5,0)
+  
+  bar_alpha <- 0
+  if(bar == TRUE){
+    bar_alpha <- 0.3
+    subtitle_label <- paste(subtitle_label, "\nWith Bar graph for Labour conflict change")
+  }
 
   
   event_colour <- "#FFE9E3"
@@ -497,12 +515,14 @@ graph_Arbeidslose_df <- function(year_range, text_offset, papir_x_pos){
     filter(Year %in% year_range) %>% 
     ggplot(aes(x=Year, y=Average_percent)) %>% +
     geom_line(color ="#ffa822")+
+    geom_bar(aes(x=Year, y=Konflikter_i_20),stat="identity", fill = "#ffa822",alpha=bar_alpha) +
     labs(y = y_label, 
          x = x_label, 
          title = title_label, 
          subtitle = subtitle_label, 
          caption = caption_label)+
     scale_x_continuous(breaks = Arbeidslose_df$Year)+
+    scale_y_continuous(labels = function(x) paste0(x,"%"))+
     geom_segment(aes(
       x = x1, 
       y = y1, 
@@ -581,21 +601,60 @@ graph_Arbeidslose_df <- function(year_range, text_offset, papir_x_pos){
              y = -(largest_value/2.6), 
              label = "*",
              colour = "#ff6150") +
-    coord_cartesian(ylim = c(0, largest_value), clip = "off") +
+    coord_cartesian(ylim = c(0, largest_value),xlim = c(min(year_range), max(year_range)), clip = "off") +
     hod_theme(alter_x_axis_colour = TRUE)+theme(axis.text.x = element_text(angle = 75, vjust = 0.5, hjust=0.5,colour = tick_colour))}
 
+
+# Arbeids konflikt graph  
+
+graph_Arbeidskonflikter_df <- function(){
+  #Graph Label
+  title_label <- paste("Konflikt ",sprintf("%d-%d",year_range[1],year_range[length(year_range)]))
+  subtitle_label <- "Average from registrated trade unionists members."
+  caption_label = "Source: accessed 12/22, (https://www.ssb.no/a/histstat/hs1968.pdf)\nYear 1924 is uncertain because of the conflict in the iron and steel industries"
+  y_label <- "Percent"
+  x_label <- paste("Year ",sprintf("%d-%d",year_range[1],year_range[length(year_range)]))
+
+  #Graph
+  Arbeidskonflikter %>%
+    ggplot(aes(x=Year, y=TotalKonflikter_i_alt)) %>% +
+    geom_bar(stat="identity", fill = "#ffa822") +
+    labs(y = y_label, 
+         x = x_label, 
+         title = title_label, 
+         subtitle = subtitle_label, 
+         caption = caption_label)+
+    scale_x_continuous(breaks = Arbeidskonflikter$Year)+
+    hod_theme(alter_x_axis_colour = TRUE)+theme(axis.text.x = element_text(angle = 75, vjust = 0.5, hjust=0.5))}
+
+
 # suppressing of element_text warning (vectorised colour element)
+
+# konflikt bar graph
+#suppressWarnings({
+#graph_Arbeidskonflikter_df()
+#})
+
+# larger view (1915-1950)
 suppressWarnings({
-graph_Arbeidslose_df(c(1915:1950), c(-4,-2),1929) # larger view (1915-1950)
+graph_Arbeidslose_df(c(1915:1950), c(-4,-2),1929) 
 })
+
+# focus on 1920-1930
 suppressWarnings({
-graph_Arbeidslose_df(c(1920:1930), c(0,-2),1928.3) # focus on 1920-1930
+graph_Arbeidslose_df(c(1920:1930), c(0,-2),1928.3)
 })
+
+# focus on 1920-1930, med bar
+suppressWarnings({
+graph_Arbeidslose_df(c(1920:1930), c(0,-2),1928.3,TRUE) 
+})
+
 ```
 
 #### Answer/Explanation
 
-I denne figuren ser vi den average arbeidsledigheten over flere ulike industrier i prosent fra år 1915 til 1950, med en versjon som er zoomed inn på 1920 til 1930. 1915 til 1950 figuren mangler data fra 1941 til 1945.
+I disse figurene ser vi den totale average arbeidsledigheten over flere ulike industrier i prosent fra år 1915 til 1950, med to versjon som er zoomed inn på 1920 til 1930. 1915 til 1950 figuren mangler data fra 1941 til 1945.
 
 Figuren viser også det høyeste punktet av arbeidsledighet og den totale gjenomsnitt arbeidsledigheten fra start året (1915 heller 1920) til slutt året (1930 heller 1950).
 
@@ -609,7 +668,9 @@ Figuren viser også det høyeste punktet av arbeidsledighet og den totale gjenom
 
 Figuren har også en lyse grå shading som viser når paripolitikken startet (1920) og sluttet (1928), det er også en sterkere shading får 1925 til 1928 siden paripolitikken hadde mer inflytelse i de årende.
 
-I 1924 kan man se en rød linje i figuren som indikerer at datan som er sammlet for det året er usikker, slik som det står i teksten på bunden av figuren. Teksten der sier at i 1924 var det var en jernkonflikt i den tiden.
+I 1924 kan man se en rød linje i figuren som indikerer at datan som er sammlet for det året er usikker, slik som det står i teksten på bunden av figuren indikert med en rød stjerne. Teksten der sier at i 1924 var det var en jernkonflikt i den industrien, mer spesifict så var det fra november 1923 til mai 1924.
+
+Det er også en tredie figur similer til figur 2 (1920-1930), utenom at denne har en bar graph på undersiden som viser hvordan total mengde konflikter utviklet seg over årende.
 
 Dataen i graphen kommer fra SSB (statistik sentralbyrå), specific en PDF dem hadde kalt "hs1968" heller "Historisk Statistikk 1968" side 81 heller slide 97 i pdfen. Som man kan se i figuren fra 1915 til 1920 så ser man mangel på data i 1941 til 1945.
 
@@ -620,3 +681,7 @@ link - https://www.ssb.no/a/histstat/hs1968.pdf
 I figurene ser vi at etter paripolitikken ble implemented ( 1920 ) så er det en sterk økning i arbeidsledighet, med en ny økning i 1925. 1925 var når de begynnte å være mer seriøs med paripolitikken, og vi ser at den fortsetter å øke til 1927. Arbeidsledighet dropper i fra 1927 til 1929, og paripolitikken sluttet i 1928 når norge gjeninnførte gull standaren i landet.
 
 Men slik man kan se i den første figuren fra 1915 - 1950, så gikk ikke arbeidsløshet tilbake til det den var før 1920 før nermere 1940 der vi ser en stor nedgang. Siden data mangler fra 1941 til 1945 så kan æ ikke si noe om den tiden, men vi ser at etter andre verdenskrig ( 1945+ ) så er vi nesten tilbake til arbeidsledigheten det var før 1920.
+
+I den tredie figuren med bar graphen kan man se i hvordan konflikt mengden endret seg med årende ( fra 1922 til 1930, 1920 og 1921 mangler data ). I denne bar graphen kan man se at det har vært en gradvis økning i konflikter siden 1922 til 1926, som er ett år før det høyeste punktet i arbeidsledighet. Deretter går den ned til sitt laveste i 1928 når paripolitikken avsluttes.
+
+Så fra disse figurene kan vi set at paripolitikken var starten av noe som hadde en effect på det norske arbeidsmarkede helt frem til 1940 - 1945, og først etter andre verdens krig ser vi at arbeidsledigheten går tilbake til det den var før 1920.
