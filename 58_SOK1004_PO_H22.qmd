@@ -46,7 +46,7 @@ hod_theme <- function(alter_x_axis_colour = FALSE,
   colour_lines <- "#827974"
   colour_main <- "#E9D5DA"
   colour_background <- "#2b2b2b"
-  colour_palette_standard <- c("#ffa822", "#ff6150","#1ac0c6")
+  colour_palette_standard <- c("#ffa822","#ff6150","#1ac0c6","#30B66A","#B06AFF","#FF21E1")
   colour_text_x_axis <- colour_text
   
   if(alter_x_axis_colour){
@@ -424,10 +424,10 @@ I besvarelsen skal dere forklare hvorfor dataene er relevante og gi en grundig b
 
 #### Besvarelse
 
-Bestemete meg for aa fokusere paa Arbeidsledighet i 1920-1930
+Bestemete meg for å fokusere på Arbeidsledighet i 1920-1930
 
 ```{r}
-# PDF data
+# PDF data fra SSB "Historisk Statistikk 1968"
 # Link to data
 # https://www.ssb.no/a/histstat/hs1968.pdf page 81 or slide 97
 
@@ -439,17 +439,22 @@ Arbeidslose_df <- data.frame (
 ```
 
 ```{r}
+#
+```
+
+```{r}
 # Create graphs
 
-graph_Arbeidslose_df <- function(year_range, text_offset){
+graph_Arbeidslose_df <- function(year_range, text_offset, papir_x_pos){
   #Graph Label
   title_label <- paste("Unemployment ",sprintf("%d-%d",year_range[1],year_range[length(year_range)]))
   subtitle_label <- "Average from registrated trade unionists members."
-  caption_label = "Source: accessed 12/22, (https://www.ssb.no/a/histstat/hs1968.pdf)\nYear 2024 is uncertain because of the conflict in the iron and steel industries"
+  caption_label = "Source: accessed 12/22, (https://www.ssb.no/a/histstat/hs1968.pdf)\nYear 1924 is uncertain because of the conflict in the iron and steel industries"
   y_label <- "Percent"
   x_label <- paste("Year ",sprintf("%d-%d",year_range[1],year_range[length(year_range)]))
   
   #Data Values
+  # Largest Value
   largest_value = max(Arbeidslose_df %>%
   filter(Year %in% year_range) %>%
     replace(is.na(.), 0) %>%
@@ -457,6 +462,7 @@ graph_Arbeidslose_df <- function(year_range, text_offset){
   
   largest_value_year = Arbeidslose_df$Year[which(Arbeidslose_df$Average_percent == largest_value)]
   
+  # Average
   average_value = Arbeidslose_df %>%
   filter(Year %in% year_range) %>%
     select(Average_percent)
@@ -464,22 +470,38 @@ graph_Arbeidslose_df <- function(year_range, text_offset){
   average_value_total = sum(average_value %>% drop_na())
   average_value = average_value_total/average_value_lenght
 
+  # event check
+  ww_1_data = ifelse(1918 %in% year_range,1918,year_range[1])
+  ww_2_data = c(ifelse(1939 %in% year_range,1939,max(year_range)),
+                ifelse(1945 %in% year_range,1945,max(year_range)))
 
+  # Line
   top_line <- data.frame(x1 = min(year_range), x2 = largest_value_year, y1 = largest_value, y2 = largest_value)
   
   avrage_line <- data.frame(x1 = min(year_range), x2 = max(year_range), y1 = average_value, y2 = average_value)
   
-  tick_colour <- ifelse(year_range == 1924, "#ff6150", c("#b8aba7","#FFE9E3"))
-  cap_colour <- ifelse(caption_label == "1924", "#ff6150", "#b8aba7")
+  paper_line <- data.frame(x1 = 1925, x2 = 1928, y1 = 1, y2 = 1)
+  
+  # Colour
+  tick_colour <- ifelse(year_range == 1924, "#ff6150", c("#FFE9E3","#b8aba7"))
+  ww_1_data_alpha = ifelse(1918 %in% year_range,0.85,0)
+  ww_2_data_alpha = ifelse(1939 %in% year_range,0.05,0)
+  ww_2_data_alpha_label = ifelse(1939 %in% year_range,0.5,0)
 
-
+  
+  event_colour <- "#FFE9E3"
+  #"#ffa822","#ff6150","#1ac0c6","#30B66A","#B06AFF
   
   #Graph
   Arbeidslose_df %>%
     filter(Year %in% year_range) %>% 
     ggplot(aes(x=Year, y=Average_percent)) %>% +
     geom_line(color ="#ffa822")+
-    labs(y = y_label, x = x_label, title = title_label, subtitle = subtitle_label, caption = caption_label)+
+    labs(y = y_label, 
+         x = x_label, 
+         title = title_label, 
+         subtitle = subtitle_label, 
+         caption = caption_label)+
     scale_x_continuous(breaks = Arbeidslose_df$Year)+
     geom_segment(aes(
       x = x1, 
@@ -487,59 +509,115 @@ graph_Arbeidslose_df <- function(year_range, text_offset){
       xend = x2, 
       yend = y2), 
       data = top_line, 
-      linetype="dashed",colour = "#FFE9E3",size=0.75)+
+      linetype="dashed",colour = "#FFE9E3",size=0.7)+
     geom_vline(xintercept = 1924,linetype="dashed",colour = "#ff6150")+
+    geom_vline(xintercept = ww_1_data,linetype="dashed",colour = event_colour,alpha=ww_1_data_alpha,size=0.8)+
     geom_segment(aes(
       x = x1, 
       y = y1, 
       xend = x2, 
       yend = y2), 
       data = avrage_line, 
-      linetype="dashed",colour = "#FFE9E3",size=0.75)+
-     annotate("text",
-              x=min(year_range)+text_offset[1],
-              y=average_value+text_offset[2],
-              label=paste0("Average: ",round(average_value,2)),
-              color="#FFE9E3")+
+      linetype="dashed",colour = "#FFE9E3",size=0.7)+
+    annotate("rect",
+            xmin=1920,
+            xmax=1928,
+            ymin=0,
+            ymax=largest_value,
+            fill ="#FFE9E3",
+            alpha=0.05)+
+    annotate("rect",
+            xmin=1925,
+            xmax=1928,
+            ymin=0,
+            ymax=largest_value,
+            fill ="#FFE9E3",
+            alpha=0.04)+
+    annotate("rect",
+            xmin=ww_2_data[1],
+            xmax=ww_2_data[2],
+            ymin=0,
+            ymax=largest_value,
+            fill =event_colour,
+            alpha=ww_2_data_alpha[1])+
     annotate("text",
-              x=min(year_range)+text_offset[1],
+            x=papir_x_pos,
+            y=4.5,
+            label="paper politic",
+            color="#FFE9E3",
+            size=3.5,
+            angle = 270,
+            alpha=0.5)+
+    annotate("text",
+            x=max(year_range)+text_offset[1],
+            y=average_value+text_offset[2],
+            label=paste0("Average: ",round(average_value,2)),
+            size=3.5,
+            color="#FFE9E3")+
+    annotate("text",
+              x=largest_value_year+text_offset[1],
               y=largest_value+text_offset[2],
               label=paste0("Highest Point: ",round(largest_value,2)),
+              size=3.5,
               color="#FFE9E3")+
-    hod_theme(alter_x_axis_colour = TRUE)+theme(axis.text.x = element_text(angle = 75, vjust = 0.5, hjust=0.5,colour = tick_colour),plot.caption = element_text(colour = cap_colour))}
+    annotate("text",
+            x=ww_1_data+1,
+            y=26,
+            label="End of ww1",
+            color=event_colour,
+            size=3.5,
+            angle = 270,
+            alpha=ww_1_data_alpha)+
+    annotate("text",
+            x=ww_2_data[2]+1,
+            y=26,
+            label="World war 2",
+            color=event_colour,
+            size=3.5,
+            angle = 270,
+            alpha=ww_2_data_alpha_label)+
+    annotate("text", 
+             x = min(year_range), 
+             y = -(largest_value/2.6), 
+             label = "*",
+             colour = "#ff6150") +
+    coord_cartesian(ylim = c(0, largest_value), clip = "off") +
+    hod_theme(alter_x_axis_colour = TRUE)+theme(axis.text.x = element_text(angle = 75, vjust = 0.5, hjust=0.5,colour = tick_colour))}
 
-graph_Arbeidslose_df(c(1915:1950), c(4,2)) # larger view (1915-1950)
-graph_Arbeidslose_df(c(1920:1930), c(1,-2)) # focus on 1920-1930
+# suppressing of element_text warning (vectorised colour element)
+suppressWarnings({
+graph_Arbeidslose_df(c(1915:1950), c(-4,-2),1929) # larger view (1915-1950)
+})
+suppressWarnings({
+graph_Arbeidslose_df(c(1920:1930), c(0,-2),1928.3) # focus on 1920-1930
+})
 ```
 
 #### Answer/Explanation
 
-\-\-\-- Introduction to the figure \-\-\--
+I denne figuren ser vi den average arbeidsledigheten over flere ulike industrier i prosent fra år 1915 til 1950, med en versjon som er zoomed inn på 1920 til 1930. 1915 til 1950 figuren mangler data fra 1941 til 1945.
 
--   What does the figure show
-
-I denne figuren ser vi den average arbeidsledigheten over flere ulike industrier i prosent fra år 1915 til 1950, med en versjon som er zoomed inn på 1920 til 1930. Figuren viser også det høyeste punktet av arbeidsledighet og den totale gjenomsnitt arbeidsledigheten fra start året til slutt året.
+Figuren viser også det høyeste punktet av arbeidsledighet og den totale gjenomsnitt arbeidsledigheten fra start året (1915 heller 1920) til slutt året (1930 heller 1950).
 
 -   høyeste punktet fra 1915 til 1950 er 33.4
 
--   høyeste punktet fra 1920 til 1930 er 33.4
+-   høyeste punktet fra 1920 til 1930 er 25.4
 
 -   Average arbeidsledighet fra 1915 til 1950 er 13.98
 
 -   Average arbeidsledighet fra 1920 til 1930 er 15.46
 
-```{=html}
-<!-- -->
-```
--   What is it suppose to show
+Figuren har også en lyse grå shading som viser når papir politikken startet (1920) og sluttet (1928), det er også en sterkere shading får 1925 til 1928 siden papir politikken hadde mer inflytelse i de årende.
 
-Graphen er laget med inntent å vise hvor stor andel av registrerte trade unionist medlemer som er arbeidsløs fra år til år og hvordan det endrer seg.
-
-\-\-\-- Why this figure is relevant \-\-\--
-
--   Where is the data from
+I 1924 kan man se en rød linje i figuren som indikerer at datan som er sammlet for det året er usikker, slik som det står i teksten på bunden av figuren. Teksten der sier at i 1924 var det var en jernkonflikt i den tiden.
 
 Dataen i graphen kommer fra SSB (statistik sentralbyrå), specific en PDF dem hadde kalt "hs1968" heller "Historisk Statistikk 1968" side 81 heller slide 97 i pdfen. Som man kan se i figuren fra 1915 til 1920 så ser man mangel på data i 1941 til 1945.
+
+Graphen er laget med inntent å vise hvor stor andel av registrerte trade unionist medlemer som er arbeidsløs fra år til år og hvordan det endrer seg mellom 1915 til 1950 i figur 1 og 1920 til 1930 i figur 2.
+
+link - https://www.ssb.no/a/histstat/hs1968.pdf
+
+\-\-\-- Why this figure is relevant \-\-\--
 
 -   What does the data say
 
@@ -547,4 +625,8 @@ Dataen i graphen kommer fra SSB (statistik sentralbyrå), specific en PDF dem ha
 
 -   How does the data change
 
-I figuren kan vi se at fra og med 1920 til 1933 så var det kraftig vekst av arbeidsledighet i arbeidsmarkedet.
+I figuren som viser data fra 1915-1950 kan vi se at fra og med 1920 til 1933 så var det kraftig vekst av arbeidsledighet i arbeidsmarkedet.
+
+\-\-\-- Sutff ----
+
+Etter 1922 ser vi en ny nedgang etterfølgt av en av de største oppgangene igjen i 1924 til 1927, der den går fra litt under 10% arbeidsledighet til det høyest punkte i 1920 tallet 25.4% arbeidsledighet.
